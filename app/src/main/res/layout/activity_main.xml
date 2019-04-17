@@ -1,18 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/main_rl"
     tools:context=".Activity.MainActivity">
 
-    <TextView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+    <com.baidu.mapapi.map.MapView
+        android:id="@+id/bmapView"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:layout_margin="30dp"
+        />
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:background="#44AEBE"
+            android:orientation="vertical">
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:text="显示个人机票"
+                android:textSize="20dp"
+                android:layout_marginTop="50dp"
+                android:layout_gravity="center"/>
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="50dp"
+                android:text="所有机票"
+                android:textSize="20dp"
+                android:layout_gravity="center"/>
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:text="导购"
+                android:textSize="20dp"
+                android:layout_marginTop="50dp"
+                android:layout_gravity="center"/>
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:text="厕所"
+                android:textSize="20dp"
+                android:layout_marginTop="50dp"
+                android:layout_gravity="center"/>
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:text="保修"
+                android:textSize="20dp"
+                android:layout_marginTop="50dp"
+                android:layout_gravity="center"/>
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:text="还车"
+                android:textSize="20dp"
+                android:layout_marginTop="50dp"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+    </LinearLayout>
+    <Button
+        android:id="@+id/isIndoor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-</android.support.constraint.ConstraintLayout>
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:text="室内图开关"
+        android:visibility="gone"
+        tools:layout_editor_absoluteX="301dp"
+        tools:layout_editor_absoluteY="26dp"
+        />
+    <!--<Button-->
+        <!--android:id="@+id/indoorsearch_bt"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:text="室内搜索" />-->
+    <!--<Button-->
+        <!--android:id="@+id/TTS_Bt"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginTop="107dp"-->
+        <!--android:layout_marginRight="0dp"-->
+        <!--android:text="语音播报"-->
+        <!--tools:layout_editor_absoluteX="301dp"-->
+        <!--tools:layout_editor_absoluteY="26dp" />-->
+</RelativeLayout>

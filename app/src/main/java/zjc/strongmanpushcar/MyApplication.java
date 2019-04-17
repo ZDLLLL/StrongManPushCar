@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.multidex.MultiDex;
 
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
@@ -26,6 +27,7 @@ public class MyApplication extends Application {
         //包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
         SDKInitializer.setCoordType(CoordType.BD09LL);
         Fresco.initialize(this);
+        MultiDex.install(this);
     }
 
     public static Context getContext() {
