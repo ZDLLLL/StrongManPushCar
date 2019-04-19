@@ -11,19 +11,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-    <com.baidu.mapapi.map.MapView
-        android:id="@+id/bmapView"
-        android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:layout_margin="30dp"
-        />
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/bmapView"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:layout_margin="30dp"
+            />
         <LinearLayout
             android:layout_width="300dp"
             android:layout_height="match_parent"
             android:background="#44AEBE"
-            android:orientation="vertical">
+           android:orientation="vertical">
             <Button
                 android:layout_width="200dp"
                 android:layout_height="80dp"
@@ -32,6 +32,7 @@
                 android:layout_marginTop="50dp"
                 android:layout_gravity="center"/>
             <Button
+                android:id="@+id/main_all_tickets"
                 android:layout_width="200dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="50dp"
@@ -39,6 +40,7 @@
                 android:textSize="20dp"
                 android:layout_gravity="center"/>
             <Button
+                android:id="@+id/main_guide"
                 android:layout_width="200dp"
                 android:layout_height="80dp"
                 android:text="导购"
@@ -46,16 +48,17 @@
                 android:layout_marginTop="50dp"
                 android:layout_gravity="center"/>
             <Button
+                android:id="@+id/main_entertainment"
                 android:layout_width="200dp"
                 android:layout_height="80dp"
-                android:text="厕所"
+                android:text="娱乐"
                 android:textSize="20dp"
                 android:layout_marginTop="50dp"
                 android:layout_gravity="center"/>
             <Button
                 android:layout_width="200dp"
                 android:layout_height="80dp"
-                android:text="保修"
+                android:text="厕所"
                 android:textSize="20dp"
                 android:layout_marginTop="50dp"
                 android:layout_gravity="center"/>
@@ -80,20 +83,20 @@
         tools:layout_editor_absoluteY="26dp"
         />
     <!--<Button-->
-        <!--android:id="@+id/indoorsearch_bt"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:text="室内搜索" />-->
+    <!--android:id="@+id/indoorsearch_bt"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:text="室内搜索" />-->
     <!--<Button-->
-        <!--android:id="@+id/TTS_Bt"-->
-        <!--android:layout_width="100dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_marginTop="107dp"-->
-        <!--android:layout_marginRight="0dp"-->
-        <!--android:text="语音播报"-->
-        <!--tools:layout_editor_absoluteX="301dp"-->
-        <!--tools:layout_editor_absoluteY="26dp" />-->
+    <!--android:id="@+id/TTS_Bt"-->
+    <!--android:layout_width="100dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentTop="true"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_marginTop="107dp"-->
+    <!--android:layout_marginRight="0dp"-->
+    <!--android:text="语音播报"-->
+    <!--tools:layout_editor_absoluteX="301dp"-->
+    <!--tools:layout_editor_absoluteY="26dp" />-->
 </RelativeLayout>

@@ -29,6 +29,10 @@ import com.baidu.mapapi.model.LatLng;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.OnClick;
+import zjc.strongmanpushcar.Activity.Entertainment.MovieActivity;
+import zjc.strongmanpushcar.Activity.Message.MessageActivity;
+import zjc.strongmanpushcar.Activity.Shopping.GuideActivity;
 import zjc.strongmanpushcar.BaseTools.BaseActivity;
 import zjc.strongmanpushcar.BaseTools.MyOrientationListener;
 import zjc.strongmanpushcar.BaseTools.indoorview.BaseStripAdapter;
@@ -357,5 +361,20 @@ public class MainActivity extends BaseActivity {
         //停止方向传感器
         myOrientationListener.stop();
         //client.disconnect();
+    }
+    @OnClick(R.id.main_all_tickets)
+    public void main_all_tickets_OnClick(){
+        Intent intent = new Intent(this, MessageActivity.class);
+        startActivity(intent);
+    }
+    @OnClick(R.id.main_entertainment)
+    public void main_entertainment_OnClick(){
+        Intent intent = new Intent(this, MovieActivity.class);
+        startActivity(intent);
+    }
+    @OnClick(R.id. main_guide)
+    public void main_guide_OnClick(){
+        Intent intent = new Intent(this, GuideActivity.class);
+        startActivity(intent);
     }
 }

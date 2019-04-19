@@ -43,7 +43,6 @@ public class MovieActivity extends BaseActivity {
     }
     @OnClick(R.id.movie_back)
     public void movie_back_OnClick(){
-        Intent intent = new Intent(this, GuideActivity.class);
-        startActivity(intent);
+        finish();
     }
 }
