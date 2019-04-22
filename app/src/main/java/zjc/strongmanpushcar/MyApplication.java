@@ -18,9 +18,10 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        context =getApplicationContext();
         //在使用SDK各组件之前初始化context信息，传入ApplicationContext
         SDKInitializer.initialize(this);
-        context =getApplicationContext();
+
         pref= PreferenceManager.getDefaultSharedPreferences(this);
         editor=pref.edit();
         //自4.3.0起，百度地图SDK所有接口均支持百度坐标和国测局坐标，用此方法设置您使用的坐标类型.

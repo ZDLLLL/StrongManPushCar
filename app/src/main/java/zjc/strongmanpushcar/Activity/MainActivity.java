@@ -1,16 +1,23 @@
 package zjc.strongmanpushcar.Activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.location.BDAbstractLocationListener;
@@ -25,22 +32,33 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
+import com.baidu.mapapi.search.poi.PoiDetailResult;
+import com.baidu.mapapi.search.poi.PoiDetailSearchResult;
+import com.baidu.mapapi.search.poi.PoiIndoorInfo;
+import com.baidu.mapapi.search.poi.PoiIndoorOption;
+import com.baidu.mapapi.search.poi.PoiIndoorResult;
+import com.baidu.mapapi.search.poi.PoiResult;
+import com.baidu.mapapi.search.poi.PoiSearch;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import zjc.strongmanpushcar.Activity.Entertainment.MovieActivity;
 import zjc.strongmanpushcar.Activity.Message.MessageActivity;
 import zjc.strongmanpushcar.Activity.Shopping.GuideActivity;
+import zjc.strongmanpushcar.Adapter.InDoorSearchAdapter;
 import zjc.strongmanpushcar.BaseTools.BaseActivity;
 import zjc.strongmanpushcar.BaseTools.MyOrientationListener;
 import zjc.strongmanpushcar.BaseTools.indoorview.BaseStripAdapter;
 import zjc.strongmanpushcar.BaseTools.indoorview.StripListView;
+import zjc.strongmanpushcar.BaseTools.overlayutil.IndoorPoiOverlay;
 import zjc.strongmanpushcar.BaseTools.overlayutil.IndoorRouteOverlay;
 import zjc.strongmanpushcar.R;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements OnGetPoiSearchResultListener,BaiduMap.OnBaseIndoorMapListener{
     @BindView(R.id.bmapView)MapView mapView;
     BaiduMap mbaiduMap;
     LocationClient mLocationClient;
@@ -67,18 +85,51 @@ public class MainActivity extends BaseActivity {
     RelativeLayout layout;
     private static boolean isPermissionRequested = false;
     private MyOrientationListener myOrientationListener;
-    Button indoorsearch_bt;
-    Button TTS_Bt;
+    @BindView(R.id.mainsearch_content_et)
+    EditText mainsearch_content_et;
+    @BindView(R.id.mainsearch_search_tv)
+    TextView mainsearch_search_tv;
+    private PoiSearch mPoiSearch = null;
+    static List<PoiIndoorInfo> poiIndoorInfoList = new ArrayList<>();
+    @BindView(R.id.indoorsearch_rv)
+    RecyclerView indoorsearch_rv;
+    InDoorSearchAdapter inDoorSearchAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mbaiduMap=mapView.getMap();
         mbaiduMap.setMyLocationEnabled(true);
+        stripListView = new StripListView(this);
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.main_rl);
+        layout.addView(stripListView);
+        mFloorListAdapter = new BaseStripAdapter(this);
         requestPermission();
         InitLocation();
         InitIndoorMap();
         initOritationListener();
+        InitIndoorSearch();
+        stripListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                if (mMapBaseIndoorMapInfo == null) {
+                    return;
+                }
+                String floor = (String) mFloorListAdapter.getItem(position);
+                mbaiduMap.switchBaseIndoorMapFloor(floor, mMapBaseIndoorMapInfo.getID());
+                mFloorListAdapter.setSelectedPostion(position);
+                mFloorListAdapter.notifyDataSetInvalidated();
+            }
+        });
+        //肯德基
+//        30.0983420000,120.5183130000
+        //30.0983093423,120.5184390625
+        //星巴克
+            //30.0987473423,120.5183270625
+        //老凤祥
+    //        30.0992423423,120.5158610625
+
 //        indoorsearch_bt.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -93,6 +144,11 @@ public class MainActivity extends BaseActivity {
 //                startActivity(intent);
 //            }
 //        });
+    }
+
+    private void InitIndoorSearch() {
+        mPoiSearch = PoiSearch.newInstance();
+        mPoiSearch.setOnGetPoiSearchResultListener(this);
     }
 
     private void InitIndoorMap() {
@@ -182,6 +238,80 @@ public class MainActivity extends BaseActivity {
         //开启地图定位图层
         mLocationClient.start();
     }
+    @OnClick(R.id.mainsearch_search_tv)
+    public void mainsearch_search_tv_Onclick(){
+        View showview = getWindow().peekDecorView();
+
+        if (showview != null) {
+            InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputmanger.hideSoftInputFromWindow(showview.getWindowToken(), 0);
+        }
+        MapBaseIndoorMapInfo indoorInfo = mbaiduMap.getFocusedBaseIndoorMapInfo();
+        if (indoorInfo == null) {
+            Toast.makeText(MainActivity.this, "当前无室内图，无法搜索", Toast.LENGTH_LONG).show();
+            return;
+        }
+        PoiIndoorOption option = new PoiIndoorOption().poiIndoorBid(
+                indoorInfo.getID()).poiIndoorWd(mainsearch_content_et.getText().toString());
+        mPoiSearch.searchPoiIndoor(option);
+    }
+    @Override
+    public void onGetPoiResult(PoiResult poiResult) {
+
+    }
+
+    @Override
+    public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
+
+    }
+
+    @Override
+    public void onGetPoiDetailResult(PoiDetailSearchResult poiDetailSearchResult) {
+
+    }
+
+    @Override
+    public void onGetPoiIndoorResult(PoiIndoorResult result) {
+        mbaiduMap.clear();
+        poiIndoorInfoList.clear();
+        if (result == null || result.error == PoiIndoorResult.ERRORNO.RESULT_NOT_FOUND) {
+            Toast.makeText(MainActivity.this, "无结果", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (result.error == PoiIndoorResult.ERRORNO.NO_ERROR) {
+            IndoorPoiOverlay overlay = new MyIndoorPoiOverlay(mbaiduMap);
+            poiIndoorInfoList = result.getmArrayPoiInfo();
+            indoorsearch_rv.setVisibility(View.VISIBLE);
+//            indoorsearch_path_bt.setVisibility(View.GONE);
+            inDoorSearchAdapter = new InDoorSearchAdapter(poiIndoorInfoList, this, this);
+            indoorsearch_rv.setLayoutManager(new LinearLayoutManager(this));
+            indoorsearch_rv.setAdapter(inDoorSearchAdapter);
+//            Log.d("zjccc", poiIndoorInfoList.get(1).address);
+            mbaiduMap.setOnMarkerClickListener(overlay);
+            //address
+            overlay.setData(result);
+            overlay.addToMap();
+            overlay.zoomToSpan();
+        }
+    }
+
+    @Override
+    public void onBaseIndoorMapMode(boolean b, MapBaseIndoorMapInfo mapBaseIndoorMapInfo) {
+
+        if (b) {
+            stripListView.setVisibility(View.VISIBLE);
+            if (mapBaseIndoorMapInfo == null) {
+                return;
+            }
+            mFloorListAdapter.setmFloorList(mapBaseIndoorMapInfo.getFloors());
+            stripListView.setStripAdapter(mFloorListAdapter);
+
+        } else {
+            stripListView.setVisibility(View.GONE);
+        }
+        mMapBaseIndoorMapInfo = mapBaseIndoorMapInfo;
+    }
+
     public class MyOwnLocationListener extends BDAbstractLocationListener {
         @Override
         public void onReceiveLocation(BDLocation location) {
@@ -241,9 +371,12 @@ public class MainActivity extends BaseActivity {
         map.setMyLocationData(locData);
 
         if (isShowLoc) {
-            LatLng ll = new LatLng(bdLocation.getLatitude(), bdLocation.getLongitude());
+            LatLng centerpos = new LatLng(30.0992120000,120.5168240000); // 北京南站
             MapStatus.Builder builder = new MapStatus.Builder();
-            builder.target(ll).zoom(19.0f);
+            builder.target(centerpos).zoom(21.0f);
+//            LatLng ll = new LatLng(bdLocation.getLatitude(), bdLocation.getLongitude());
+//            MapStatus.Builder builder = new MapStatus.Builder();
+//            builder.target(ll).zoom(19.0f);
             map.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
         }
     }
@@ -376,5 +509,77 @@ public class MainActivity extends BaseActivity {
     public void main_guide_OnClick(){
         Intent intent = new Intent(this, GuideActivity.class);
         startActivity(intent);
+    }
+    private class MyIndoorPoiOverlay extends IndoorPoiOverlay {
+
+        /**
+         * 构造函数
+         *
+         * @param baiduMap 该 IndoorPoiOverlay 引用的 BaiduMap 对象
+         */
+        public MyIndoorPoiOverlay(BaiduMap baiduMap) {
+            super(baiduMap);
+        }
+
+        @Override
+        /**
+         * 响应点击室内POI点事件
+         * @param i
+         *            被点击的poi在
+         *            {@link com.baidu.mapapi.search.poi.PoiIndoorResult#getmArrayPoiInfo()} } 中的索引
+         * @return
+         */
+        public boolean onPoiClick(int i) {
+            PoiIndoorInfo info = getIndoorPoiResult().getmArrayPoiInfo().get(i);
+            Log.v("zjc", String.valueOf(info.latLng.longitude));
+            Log.v("zjc", String.valueOf(info.latLng.latitude));
+            Toast.makeText(MainActivity.this, info.name + ",在" + info.floor + "层", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (isShouldHideInput(v, ev)) {
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+            return super.dispatchTouchEvent(ev);
+        }
+        // 必不可少，否则所有的组件都不会有TouchEvent了
+        if (getWindow().superDispatchTouchEvent(ev)) {
+            return true;
+        }
+        return onTouchEvent(ev);
+    }
+
+    public boolean isShouldHideInput(View v, MotionEvent event) {
+        if (v != null && (v instanceof EditText)) {
+            int[] leftTop = {0, 0};
+            //获取输入框当前的location位置
+            v.getLocationInWindow(leftTop);
+            int left = leftTop[0];
+            int top = leftTop[1];
+            int bottom = top + v.getHeight();
+            int right = left + v.getWidth();
+            if (event.getX() > left && event.getX() < right
+                    && event.getY() > top && event.getY() < bottom) {
+                // 点击的是输入框区域，保留点击EditText的事件
+                return false;
+            } else {
+                //使EditText触发一次失去焦点事件
+                v.setFocusable(false);
+//                v.setFocusable(true); //这里不需要是因为下面一句代码会同时实现这个功能
+                v.setFocusableInTouchMode(true);
+                return true;
+            }
+        }
+        return false;
     }
 }
