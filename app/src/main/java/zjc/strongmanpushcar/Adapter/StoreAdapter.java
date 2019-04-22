@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -46,10 +47,12 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHod
     public class StoreViewHodler extends RecyclerView.ViewHolder {
          ImageView store_img;
          TextView  store_name;
+         FrameLayout store_fl;
         public StoreViewHodler(@NonNull View itemView) {
             super(itemView);
             store_img = itemView.findViewById(R.id.store_img);
             store_name = itemView.findViewById(R.id.store_name);
+            store_fl = itemView.findViewById(R.id.store_fl);
         }
     }
 }

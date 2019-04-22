@@ -37,4 +37,11 @@
         <!-- 加载网络数据时覆盖在BGABanner最上层的占位图 -->
 
     </style>
+    <!--底部弹框-->
+    <style name="BottomDialog" parent="@style/AppTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
 </resources>
