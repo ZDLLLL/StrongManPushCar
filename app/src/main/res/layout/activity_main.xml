@@ -2,75 +2,145 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_rl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main_rl"
     tools:context=".Activity.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-        <com.baidu.mapapi.map.MapView
-            android:id="@+id/bmapView"
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:clickable="true"
-            android:layout_margin="30dp"
-            />
+            android:layout_weight="1">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/seach_ll"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/search" />
+
+                <EditText
+                    android:id="@+id/mainsearch_content_et"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="在当前室内搜索" />
+
+                <View
+                    android:layout_width="1px"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="#9C9C9C" />
+
+                <TextView
+                    android:id="@+id/mainsearch_search_tv"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="搜索"
+                    android:textSize="20dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_below="@+id/seach_ll"
+                >
+                <com.baidu.mapapi.map.MapView
+                    android:id="@+id/bmapView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="30dp"
+                    android:clickable="true" />
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="242dp"
+                    android:visibility="gone"
+                    android:id="@+id/indoorsearch_rv">
+                </android.support.v7.widget.RecyclerView>
+            </LinearLayout>
+
+        </RelativeLayout>
+
         <LinearLayout
             android:layout_width="300dp"
             android:layout_height="match_parent"
             android:background="#44AEBE"
-           android:orientation="vertical">
+            android:orientation="vertical">
+
             <Button
                 android:layout_width="200dp"
                 android:layout_height="80dp"
-                android:text="显示个人机票"
-                android:textSize="20dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="50dp"
-                android:layout_gravity="center"/>
+                android:text="显示个人机票"
+                android:textSize="20dp" />
+
             <Button
                 android:id="@+id/main_all_tickets"
                 android:layout_width="200dp"
                 android:layout_height="80dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="50dp"
                 android:text="所有机票"
-                android:textSize="20dp"
-                android:layout_gravity="center"/>
+                android:textSize="20dp" />
+
             <Button
                 android:id="@+id/main_guide"
                 android:layout_width="200dp"
                 android:layout_height="80dp"
-                android:text="导购"
-                android:textSize="20dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="50dp"
-                android:layout_gravity="center"/>
+                android:text="导购"
+                android:textSize="20dp" />
+
             <Button
                 android:id="@+id/main_entertainment"
                 android:layout_width="200dp"
                 android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="50dp"
                 android:text="娱乐"
-                android:textSize="20dp"
-                android:layout_marginTop="50dp"
-                android:layout_gravity="center"/>
+                android:textSize="20dp" />
+
             <Button
                 android:layout_width="200dp"
                 android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="50dp"
                 android:text="厕所"
-                android:textSize="20dp"
-                android:layout_marginTop="50dp"
-                android:layout_gravity="center"/>
+                android:textSize="20dp" />
+
             <Button
                 android:layout_width="200dp"
                 android:layout_height="80dp"
-                android:text="还车"
-                android:textSize="20dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="50dp"
-                android:layout_gravity="center"/>
+                android:text="还车"
+                android:textSize="20dp" />
         </LinearLayout>
     </LinearLayout>
+
     <Button
         android:id="@+id/isIndoor"
         android:layout_width="wrap_content"
@@ -80,8 +150,8 @@
         android:text="室内图开关"
         android:visibility="gone"
         tools:layout_editor_absoluteX="301dp"
-        tools:layout_editor_absoluteY="26dp"
-        />
+        tools:layout_editor_absoluteY="26dp" />
+
     <!--<Button-->
     <!--android:id="@+id/indoorsearch_bt"-->
     <!--android:layout_width="wrap_content"-->

@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        debug {
+            keyAlias 'key0'
+            keyPassword '000000'
+            storeFile file('D:/CarTest/导航.jks')
+            storePassword '000000'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "zjc.strongmanpushcar"
@@ -11,7 +19,7 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk { //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
-            abiFilters "armeabi", "x86", "x86_64"
+            abiFilters "armeabi"
         }
         //添加了javaCompileOptions
         javaCompileOptions {
@@ -33,6 +41,19 @@ android {
             dirs 'libs'
         }
 
+    }
+    lintOptions {
+        abortOnError false
+    }
+    configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            def requested = details.requested
+            if (requested.group == 'com.android.support') {
+                if (!requested.name.startsWith("multidex")) {
+                    details.useVersion '28.0.0'
+                }
+            }
+        }
     }
 }
 
@@ -79,4 +100,6 @@ dependencies {
     implementation(name: 'onsdk_all', ext: 'aar')
     //导入app2.aar并执行
     implementation(name: 'NaviTts', ext: 'aar')
+    implementation files('libs/AMap3DMap_6.8.0_AMapNavi_6.7.0_20190401.jar')
+    implementation files('libs/Msc.jar')
 }
