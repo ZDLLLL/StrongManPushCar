@@ -4,6 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.Login.LoginActivity">
+    android:orientation="vertical"
+    tools:context=".Activity.Login.LoginActivity"
+    android:background="#ABC4D8EC">
+    <LinearLayout
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <Button
+            android:textSize="45sp"
+            android:text="扫 码 登 陆"
+            android:layout_marginRight="120dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:background="@drawable/login_button"
+            android:layout_width="350dp"
+            android:layout_height="350dp" />
+        <Button
+            android:id="@+id/idcard_bt"
+            android:textSize="45sp"
+            android:text="身 份 证 登 陆"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:background="@drawable/login_button"
+            android:layout_width="350dp"
+            android:layout_height="350dp" />
+    </LinearLayout>
 
 </LinearLayout>

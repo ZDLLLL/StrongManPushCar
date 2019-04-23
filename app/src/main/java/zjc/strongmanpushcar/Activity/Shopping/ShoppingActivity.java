@@ -1,6 +1,5 @@
 package zjc.strongmanpushcar.Activity.Shopping;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,14 +9,14 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import butterknife.OnItemClick;
-import zjc.strongmanpushcar.Activity.Entertainment.MovieActivity;
 import zjc.strongmanpushcar.Adapter.FoodAdapter;
 import zjc.strongmanpushcar.Adapter.FoodCategoryAdapter;
 import zjc.strongmanpushcar.BaseTools.BaseActivity;
 import zjc.strongmanpushcar.Beans.Food;
 import zjc.strongmanpushcar.Beans.FoodCatergory;
 import zjc.strongmanpushcar.R;
+import zjc.strongmanpushcar.Servers.Server.ShoppingServer;
+import zjc.strongmanpushcar.Servers.ServerImp.ShoppingServerImp;
 
 public class ShoppingActivity extends BaseActivity {
     @BindView(R.id.catergory_rv)
@@ -26,14 +25,20 @@ public class ShoppingActivity extends BaseActivity {
     RecyclerView food_rv;
     FoodAdapter foodAdapter;
     FoodCategoryAdapter foodCategoryAdapter;
+
+    ShoppingServer shoppingServer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping);
+        shoppingServer = new ShoppingServerImp(this);
+        String shopid = "2";
+        shoppingServer.getClassifyListByshopId(shopid);
+    }
+    public void CatergoryCallBack(List<FoodCatergory> list){
         catergory_rv.setLayoutManager(new LinearLayoutManager(this));
-        foodCategoryAdapter = new FoodCategoryAdapter(this, getCatergoryDate(),this);
+        foodCategoryAdapter = new FoodCategoryAdapter(this, list,this);
         catergory_rv.setAdapter(foodCategoryAdapter);
-
     }
     public void getFood(int i){
         if (i==0){
@@ -46,19 +51,6 @@ public class ShoppingActivity extends BaseActivity {
             food_rv.setAdapter(foodAdapter);
         }
 
-    }
-    List<FoodCatergory>  list = new ArrayList<>();
-    public List<FoodCatergory> getCatergoryDate(){
-        FoodCatergory catergory = new FoodCatergory();
-        catergory.setCatergryName("买过");
-        list.add(catergory);
-        catergory = new FoodCatergory();
-        catergory.setCatergryName("好评如潮");
-        list.add(catergory);
-        catergory = new FoodCatergory();
-        catergory.setCatergryName("好评如潮");
-        list.add(catergory);
-        return list;
     }
 
     public List<Food> getFoodDate(){
@@ -89,7 +81,6 @@ public class ShoppingActivity extends BaseActivity {
     }
     @OnClick(R.id.shopping_back)
     public void shopping_back_OnClick(){
-        Intent intent = new Intent(this, MovieActivity.class);
-        startActivity(intent);
+        finish();
     }
 }

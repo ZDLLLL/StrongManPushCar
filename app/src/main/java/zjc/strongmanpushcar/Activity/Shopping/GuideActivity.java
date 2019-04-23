@@ -70,7 +70,7 @@ public class GuideActivity extends BaseActivity {
             guide_banner.setVisibility(View.VISIBLE);
         }
         guide_store_rv.setLayoutManager(new GridLayoutManager(this,3,GridLayoutManager.VERTICAL,false));
-        storeAdapter = new StoreAdapter(this,getStoreData());
+        storeAdapter = new StoreAdapter(this,getStoreData(),this);
         guide_store_rv.setAdapter(storeAdapter);
     }
     public List<Store> getStoreData(){

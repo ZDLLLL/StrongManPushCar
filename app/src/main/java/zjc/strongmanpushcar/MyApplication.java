@@ -15,6 +15,9 @@ public class MyApplication extends Application {
 
     private SharedPreferences pref;//喜好设置
     private SharedPreferences.Editor editor;//让sharedPreferences处于编辑状态
+    public static String IdCard ;
+    public static String Name;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -29,6 +32,22 @@ public class MyApplication extends Application {
         SDKInitializer.setCoordType(CoordType.BD09LL);
         Fresco.initialize(this);
         MultiDex.install(this);
+    }
+
+    public static String getName() {
+        return Name;
+    }
+
+    public static void setName(String name) {
+        Name = name;
+    }
+
+    public static String getIdCard() {
+        return IdCard;
+    }
+
+    public static void setIdCard(String idCard) {
+        IdCard = idCard;
     }
 
     public static Context getContext() {
