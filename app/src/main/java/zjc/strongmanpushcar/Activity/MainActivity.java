@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -40,6 +41,7 @@ import com.baidu.mapapi.search.poi.PoiIndoorOption;
 import com.baidu.mapapi.search.poi.PoiIndoorResult;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
+import com.liuxin.floatmenulib.view.MenuLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +51,7 @@ import butterknife.OnClick;
 import zjc.strongmanpushcar.Activity.Entertainment.MovieActivity;
 import zjc.strongmanpushcar.Activity.Message.MessageActivity;
 import zjc.strongmanpushcar.Activity.Shopping.GuideActivity;
+import zjc.strongmanpushcar.Adapter.FlightRecyclerViewAdapter;
 import zjc.strongmanpushcar.Adapter.InDoorSearchAdapter;
 import zjc.strongmanpushcar.BaseTools.BaseActivity;
 import zjc.strongmanpushcar.BaseTools.MyOrientationListener;
@@ -58,7 +61,7 @@ import zjc.strongmanpushcar.BaseTools.overlayutil.IndoorPoiOverlay;
 import zjc.strongmanpushcar.BaseTools.overlayutil.IndoorRouteOverlay;
 import zjc.strongmanpushcar.R;
 
-public class MainActivity extends BaseActivity implements OnGetPoiSearchResultListener,BaiduMap.OnBaseIndoorMapListener{
+public class MainActivity extends BaseActivity implements OnGetPoiSearchResultListener,BaiduMap.OnBaseIndoorMapListener,FlightRecyclerViewAdapter.onSlidingViewClickListener{
     @BindView(R.id.bmapView)MapView mapView;
     BaiduMap mbaiduMap;
     LocationClient mLocationClient;
@@ -68,15 +71,14 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
     /**
      * 最新一次的经纬度
      */
-    private double mCurrentLantitude;
-    private double mCurrentLongitude;
+    public double mCurrentLantitude;
+    public double mCurrentLongitude;
     /**
      * 当前的精度
      */
     private float mCurrentAccracy;
     //防止每次定位都重新设置中心点和marker
     private boolean isFirstLocation = true;
-    @BindView(R.id.isIndoor) Button isIndoorBtn;
     Boolean isIndoor = true;
     IndoorRouteOverlay mIndoorRoutelineOverlay = null;
     StripListView stripListView;
@@ -94,6 +96,9 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
     @BindView(R.id.indoorsearch_rv)
     RecyclerView indoorsearch_rv;
     InDoorSearchAdapter inDoorSearchAdapter;
+    @BindView(R.id.menuLayout)MenuLayout menuLayout;
+    private FlightRecyclerViewAdapter flightRecyclerViewAdapter;
+    @BindView(R.id.flight_rv)RecyclerView flight_rv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +109,14 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.main_rl);
         layout.addView(stripListView);
         mFloorListAdapter = new BaseStripAdapter(this);
+        flightRecyclerViewAdapter=new FlightRecyclerViewAdapter(this);
+        flight_rv.setLayoutManager(new LinearLayoutManager(this));
+        //将适配的内容放入 mRecyclerView
+        flight_rv.setAdapter(flightRecyclerViewAdapter);
+        //控制Item增删的动画，需要通过ItemAnimator  DefaultItemAnimator -- 实现自定义动画
+        flight_rv.setItemAnimator(new DefaultItemAnimator());
+        //设置滑动监听器 （侧滑）
+        flightRecyclerViewAdapter.setOnSlidListener(this);
         requestPermission();
         InitLocation();
         InitIndoorMap();
@@ -122,6 +135,7 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
                 mFloorListAdapter.notifyDataSetInvalidated();
             }
         });
+        InitFloatMenuBt();
         //肯德基
 //        30.0983420000,120.5183130000
         //30.0983093423,120.5184390625
@@ -130,20 +144,70 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
         //老凤祥
     //        30.0992423423,120.5158610625
 
-//        indoorsearch_bt.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent=new Intent(MainActivity.this,IndoorSearchActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//        TTS_Bt.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent=new Intent(MainActivity.this,LiteActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+
+    }
+    public void InitFloatMenuBt(){
+
+        menuLayout.setMainButtonColorAndIcon(R.color.colorWhite,R.mipmap.ic_add_black_36dp)
+                .setListImageResource(R.drawable.flight32,R.drawable.entertainment32,R.drawable.toilet32,R.drawable.shop32,R.drawable.repay32)
+                .setListText("所有航班","娱乐","厕所","导购","还车")
+                .setOnItemClickListener(new MenuLayout.OnItemClickListener() {
+                    @Override
+                    public void onTextItemClickListener(int position, String str) {
+
+                      //  Toast.makeText(MainActivity.this,"positiion"+position+":"+str,Toast.LENGTH_SHORT).show();
+                        if(position==0){//显示所有航班
+                            Intent intent = new Intent(MainActivity.this, MessageActivity.class);
+                            startActivity(intent);
+                        }else if(position==1){//娱乐
+                            Intent intent = new Intent(MainActivity.this,MovieActivity.class);
+                            startActivity(intent);
+                        }else if(position==2){//厕所
+                            MapBaseIndoorMapInfo indoorInfo = mbaiduMap.getFocusedBaseIndoorMapInfo();
+                            if (indoorInfo == null) {
+                                Toast.makeText(MainActivity.this, "当前无室内图，无法搜索", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                            PoiIndoorOption option = new PoiIndoorOption().poiIndoorBid(
+                                    indoorInfo.getID()).poiIndoorWd("厕所");
+                            mPoiSearch.searchPoiIndoor(option);
+                        }else if(position==3){//导购
+                            Intent intent = new Intent(MainActivity.this,GuideActivity.class);
+                            startActivity(intent);
+                        }else {//还车
+
+                        }
+                        menuLayout.popupMenu();
+                    }
+
+                    @Override
+                    public void onImageItemClickListener(int position, int resId) {
+                       // Toast.makeText(MainActivity.this,"positiion"+position+":"+resId,Toast.LENGTH_SHORT).show();
+                        if(position==0){//显示所有航班
+                            Intent intent = new Intent(MainActivity.this, MessageActivity.class);
+                            startActivity(intent);
+                        }else if(position==1){//娱乐
+                            Intent intent = new Intent(MainActivity.this,MovieActivity.class);
+                            startActivity(intent);
+                        }else if(position==2){//厕所
+                            MapBaseIndoorMapInfo indoorInfo = mbaiduMap.getFocusedBaseIndoorMapInfo();
+                            if (indoorInfo == null) {
+                                Toast.makeText(MainActivity.this, "当前无室内图，无法搜索", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                            PoiIndoorOption option = new PoiIndoorOption().poiIndoorBid(
+                                    indoorInfo.getID()).poiIndoorWd("厕所");
+                            mPoiSearch.searchPoiIndoor(option);
+                        }else if(position==3){//导购
+                            Intent intent = new Intent(MainActivity.this,GuideActivity.class);
+                            startActivity(intent);
+                        }else {//还车
+
+                        }
+                        menuLayout.popupMenu();
+                    }
+                }).createMenu();
+
     }
 
     private void InitIndoorSearch() {
@@ -154,17 +218,17 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
     private void InitIndoorMap() {
         //开启室内图
         mbaiduMap.setIndoorEnable(true);
-        isIndoorBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isIndoor) {
-                    EnableIndoorMap();
-                } else {
-                    DisableIndoorMap();
-                }
-                isIndoor = !isIndoor;
-            }
-        });
+//        isIndoorBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (!isIndoor) {
+//                    EnableIndoorMap();
+//                } else {
+//                    DisableIndoorMap();
+//                }
+//                isIndoor = !isIndoor;
+//            }
+//        });
         layout = findViewById(R.id.main_rl);
         stripListView = new StripListView(this);
         layout.addView(stripListView);
@@ -312,6 +376,16 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
         mMapBaseIndoorMapInfo = mapBaseIndoorMapInfo;
     }
 
+    @Override
+    public void onItemClick(View view, int position) {
+
+    }
+
+    @Override
+    public void onDeleteBtnCilck(View view, int position) {
+
+    }
+
     public class MyOwnLocationListener extends BDAbstractLocationListener {
         @Override
         public void onReceiveLocation(BDLocation location) {
@@ -380,22 +454,22 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
             map.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
         }
     }
-    private void EnableIndoorMap() {
-        mbaiduMap.setIndoorEnable(true);
-        isIndoorBtn.setText("关闭室内图");
-        Toast.makeText(MainActivity.this, "室内图已打开", Toast.LENGTH_SHORT).show();
-    }
-    private void DisableIndoorMap() {
-        if (null != mIndoorRoutelineOverlay) {
-            mIndoorRoutelineOverlay.removeFromMap();
-            mIndoorRoutelineOverlay = null;
-        }
-        mbaiduMap.clear();
-        mbaiduMap.setIndoorEnable(false);
-        isIndoorBtn.setText("打开室内图");
-
-        Toast.makeText(MainActivity.this, "室内图已关闭", Toast.LENGTH_SHORT).show();
-    }
+//    private void EnableIndoorMap() {
+//        mbaiduMap.setIndoorEnable(true);
+//        isIndoorBtn.setText("关闭室内图");
+//        Toast.makeText(MainActivity.this, "室内图已打开", Toast.LENGTH_SHORT).show();
+//    }
+//    private void DisableIndoorMap() {
+//        if (null != mIndoorRoutelineOverlay) {
+//            mIndoorRoutelineOverlay.removeFromMap();
+//            mIndoorRoutelineOverlay = null;
+//        }
+//        mbaiduMap.clear();
+//        mbaiduMap.setIndoorEnable(false);
+//        isIndoorBtn.setText("打开室内图");
+//
+//        Toast.makeText(MainActivity.this, "室内图已关闭", Toast.LENGTH_SHORT).show();
+//    }
     /**
      * Android6.0之后需要动态申请权限
      */
@@ -495,21 +569,7 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
         myOrientationListener.stop();
         //client.disconnect();
     }
-    @OnClick(R.id.main_all_tickets)
-    public void main_all_tickets_OnClick(){
-        Intent intent = new Intent(this, MessageActivity.class);
-        startActivity(intent);
-    }
-    @OnClick(R.id.main_entertainment)
-    public void main_entertainment_OnClick(){
-        Intent intent = new Intent(this, MovieActivity.class);
-        startActivity(intent);
-    }
-    @OnClick(R.id. main_guide)
-    public void main_guide_OnClick(){
-        Intent intent = new Intent(this, GuideActivity.class);
-        startActivity(intent);
-    }
+
     private class MyIndoorPoiOverlay extends IndoorPoiOverlay {
 
         /**

@@ -70,7 +70,9 @@ import zjc.strongmanpushcar.BaseTools.indoorview.StripListView;
 import zjc.strongmanpushcar.BaseTools.overlayutil.IndoorPoiOverlay;
 import zjc.strongmanpushcar.BaseTools.overlayutil.IndoorRouteOverlay;
 import zjc.strongmanpushcar.R;
+
 import com.baidu.navisdk.adapter.BNRoutePlanNode.CoordinateType;
+
 public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBaseIndoorMapListener, OnGetRoutePlanResultListener {
     @BindView(R.id.MBaiduMap)
     MapView mapView;
@@ -101,8 +103,11 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
     String latLng;//目的地
     private double endLongitude;//经度
     private double endLatitude;//纬度
+    private double startLongitude;//经度
+    private double startLatitude;//纬度
     String floor;
-    @BindView(R.id.navigation_bt)Button navigation_bt;
+    @BindView(R.id.navigation_bt)
+    Button navigation_bt;
     private String mSDCardPath = null;
     private static final String APP_FOLDER_NAME = "StrongManPushCar";
     private static final String[] authBaseArr = {
@@ -121,11 +126,12 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_planning);
-        endLongitude=getIntent().getDoubleExtra("endLongitude",0);
-        endLatitude=getIntent().getDoubleExtra("endLatitude",0);
-        floor=getIntent().getStringExtra("floor");
 
-        mbaiduMap=mapView.getMap();
+        endLongitude = getIntent().getDoubleExtra("endLongitude", 0);
+        endLatitude = getIntent().getDoubleExtra("endLatitude", 0);
+        floor = getIntent().getStringExtra("floor");
+
+        mbaiduMap = mapView.getMap();
         mbaiduMap.setMyLocationEnabled(true);
         stripListView = new StripListView(this);
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.routeplanning_rl);
@@ -136,15 +142,20 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
         initOritationListener();
         initRoutePlanning();
 
-        if (initDirs()) {
-            initNavi();
-        }
+//        if (initDirs()) {
+//            initNavi();
+//        }
 
     }
+
     @OnClick(R.id.navigation_bt)
-    public void navigation_bt_Onclick(){
-            Intent intent=new Intent(RoutePlanningActivity.this,GaoDeNavActivity.class);
-            startActivity(intent);
+    public void navigation_bt_Onclick() {
+        Intent intent = new Intent(RoutePlanningActivity.this, GaoDeNavActivity.class);
+        intent.putExtra("endLongitude",endLongitude);
+        intent.putExtra("endLatitude",endLatitude);
+        intent.putExtra("startLatitude",mCurrentLantitude);
+        intent.putExtra("startLongitude",mCurrentLongitude);
+        startActivity(intent);
     }
 //        if (BaiduNaviManagerFactory.getBaiduNaviManager().isInited()) {
 //            if (!hasInitSuccess) {
@@ -218,7 +229,8 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
             }
         });
     }
-    public void initRoutePlanning(){
+
+    public void initRoutePlanning() {
         mSearch = RoutePlanSearch.newInstance();
         mSearch.setOnGetRoutePlanResultListener(this);
         // 发起室内路线规划检索 30.0990130000,120.5161120000
@@ -226,18 +238,19 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
         IndoorPlanNode endNode = new IndoorPlanNode(new LatLng(endLatitude, endLongitude), floor);
         IndoorRoutePlanOption irpo = new IndoorRoutePlanOption().from(startNode).to(endNode);
         mSearch.walkingIndoorSearch(irpo);
-        LatLng start=new LatLng(30.0983420000, 120.5183130000);
-        LatLng end=new LatLng(endLatitude, endLongitude);
-        Double a=DistanceUtil. getDistance(start, end);
-        Toast.makeText(RoutePlanningActivity.this,"两点之间的距离"+a,Toast.LENGTH_LONG).show();
+        LatLng start = new LatLng(30.0983420000, 120.5183130000);
+        LatLng end = new LatLng(endLatitude, endLongitude);
+        Double a = DistanceUtil.getDistance(start, end);
+        Toast.makeText(RoutePlanningActivity.this, "两点之间的距离" + a, Toast.LENGTH_LONG).show();
 
     }
 
     @OnClick(R.id.routeplanning_back_ib)
-    public void routeplanning_back_ib_Onclick(){
+    public void routeplanning_back_ib_Onclick() {
         finish();
     }
-    public void InitLocation(){
+
+    public void InitLocation() {
 
         //定位初始化
         mLocationClient = new LocationClient(this);
@@ -254,6 +267,7 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
         //开启地图定位图层
         mLocationClient.start();
     }
+
     private void InitIndoorMap() {
         //开启室内图
         mbaiduMap.setIndoorEnable(true);
@@ -270,7 +284,7 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
                     stripListView.setVisibility(View.INVISIBLE);
                     return;
                 }
-                mFloorListAdapter.setmFloorList( mapBaseIndoorMapInfo.getFloors());
+                mFloorListAdapter.setmFloorList(mapBaseIndoorMapInfo.getFloors());
                 stripListView.setVisibility(View.VISIBLE);
                 stripListView.setStripAdapter(mFloorListAdapter);
                 mMapBaseIndoorMapInfo = mapBaseIndoorMapInfo;
@@ -293,6 +307,7 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
             }
         });
     }
+
     @Override
     public void onBaseIndoorMapMode(boolean b, MapBaseIndoorMapInfo mapBaseIndoorMapInfo) {
 
@@ -334,7 +349,7 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
     public void onGetIndoorRouteResult(IndoorRouteResult indoorRouteResult) {
         if (indoorRouteResult.error == SearchResult.ERRORNO.NO_ERROR) {
             IndoorRouteOverlay overlay = new IndoorRouteOverlay(mbaiduMap);
-            for (int i=0;i<indoorRouteResult.getRouteLines().size();i++){
+            for (int i = 0; i < indoorRouteResult.getRouteLines().size(); i++) {
                 mIndoorRouteline = indoorRouteResult.getRouteLines().get(i);
                 nodeIndex = -1;
                 overlay.setData(mIndoorRouteline);
@@ -366,10 +381,10 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
                 String buildingID = location.getBuildingID();// 百度内部建筑物ID
                 String buildingName = location.getBuildingName();// 百度内部建筑物缩写
                 String floor = location.getFloor();// 室内定位的楼层信息，如 f1,f2,b1,b2
-                Log.v("aaa",buildingID);
-                Log.v("bbb",buildingName);
-                Log.v("ccc",floor);
-                Toast.makeText(RoutePlanningActivity.this,"ID:"+buildingID+"name:"+buildingName+"楼层："+floor,Toast.LENGTH_LONG).show();
+                Log.v("aaa", buildingID);
+                Log.v("bbb", buildingName);
+                Log.v("ccc", floor);
+                Toast.makeText(RoutePlanningActivity.this, "ID:" + buildingID + "name:" + buildingName + "楼层：" + floor, Toast.LENGTH_LONG).show();
                 mLocationClient.startIndoorMode();// 开启室内定位模式（重复调用也没问题），开启后，定位SDK会融合各种定位信息（GPS,WI-FI，蓝牙，传感器等）连续平滑的输出定位结果；
             }
             //获取当前定位
@@ -379,16 +394,16 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
                     // 此处设置开发者获取到的方向信息，顺时针0-360
                     .direction(location.getDirection()).latitude(location.getLatitude())
                     .longitude(location.getLongitude()).build();
-            Longitude=location.getLongitude();
+            Longitude = location.getLongitude();
 
-            Latitude=location.getLatitude();
+            Latitude = location.getLatitude();
             mCurrentAccracy = location.getRadius();
             // 设置定位数据
             mbaiduMap.setMyLocationData(locData);
             mCurrentLantitude = location.getLatitude();
             mCurrentLongitude = location.getLongitude();
 
-            Log.v("zjc","Longitude:"+Longitude+",Latitude:"+Latitude);
+            Log.v("zjc", "Longitude:" + Longitude + ",Latitude:" + Latitude);
             MapStatus.Builder builder = new MapStatus.Builder();
             builder.zoom(21.0f);
             mbaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
@@ -401,6 +416,7 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
 //            }
         }
     }
+
     /**
      * 设置中心点和添加marker
      *
@@ -416,7 +432,7 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
         map.setMyLocationData(locData);
 
         if (isShowLoc) {
-            LatLng centerpos = new LatLng(30.0992120000,120.5168240000); // 北京南站
+            LatLng centerpos = new LatLng(30.0992120000, 120.5168240000); // 北京南站
             MapStatus.Builder builder = new MapStatus.Builder();
             builder.target(centerpos).zoom(21.0f);
             map.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
@@ -426,6 +442,7 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
 
         }
     }
+
     @Override
     protected void onDestroy() {
         mLocationClient.stop();
@@ -440,25 +457,24 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
         super.onPause();
         mapView.onPause();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
         mapView.onResume();
     }
+
     /**
      * 初始化方向传感器
      */
-    private void initOritationListener()
-    {
+    private void initOritationListener() {
         myOrientationListener = new MyOrientationListener(
                 getApplicationContext());
         myOrientationListener
-                .setmOnOrientationListener(new MyOrientationListener.OnOrientationListener()
-                {
+                .setmOnOrientationListener(new MyOrientationListener.OnOrientationListener() {
                     @Override
-                    public void onOrientationChanged(float x)
-                    {
+                    public void onOrientationChanged(float x) {
                         mCurrentX = (int) x;
 
                         // 构造定位数据
@@ -480,6 +496,7 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
                     }
                 });
     }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -493,6 +510,7 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
             myOrientationListener.start();
         }
     }
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -520,12 +538,14 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
         }
         return true;
     }
+
     private String getSdcardDir() {
         if (Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED)) {
             return Environment.getExternalStorageDirectory().toString();
         }
         return null;
     }
+
     private void initNavi() {
         // 申请权限
         if (android.os.Build.VERSION.SDK_INT >= 23) {
@@ -540,7 +560,7 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
 
                     @Override
                     public void onAuthResult(int status, String msg) {
-                        Log.v("zjzz",msg);
+                        Log.v("zjzz", msg);
                         String result;
                         if (0 == status) {
                             result = "key校验成功!";
@@ -566,7 +586,7 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
                     @Override
                     public void initFailed() {
                         String a;
-                        a="aaaa";
+                        a = "aaaa";
                         Toast.makeText(RoutePlanningActivity.this, "百度导航引擎初始化失败", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -582,6 +602,7 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
         }
         return true;
     }
+
     private void initTTS() {
         // 使用内置TTS
         BaiduNaviManagerFactory.getTTSManager().initTTS(getApplicationContext(),
@@ -605,7 +626,7 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
 
                     @Override
                     public void onPlayError(int code, String message) {
-                        Log.e("BNSDKDemo", "ttsCallback.onPlayError"+message);
+                        Log.e("BNSDKDemo", "ttsCallback.onPlayError" + message);
                     }
                 }
         );
@@ -620,6 +641,7 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
                 }
         );
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
