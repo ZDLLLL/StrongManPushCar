@@ -1,6 +1,9 @@
 package zjc.strongmanpushcar.Activity;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,10 +16,15 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -97,8 +105,7 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
     RecyclerView indoorsearch_rv;
     InDoorSearchAdapter inDoorSearchAdapter;
     @BindView(R.id.menuLayout)MenuLayout menuLayout;
-    private FlightRecyclerViewAdapter flightRecyclerViewAdapter;
-    @BindView(R.id.flight_rv)RecyclerView flight_rv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,14 +116,7 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.main_rl);
         layout.addView(stripListView);
         mFloorListAdapter = new BaseStripAdapter(this);
-        flightRecyclerViewAdapter=new FlightRecyclerViewAdapter(this);
-        flight_rv.setLayoutManager(new LinearLayoutManager(this));
-        //将适配的内容放入 mRecyclerView
-        flight_rv.setAdapter(flightRecyclerViewAdapter);
-        //控制Item增删的动画，需要通过ItemAnimator  DefaultItemAnimator -- 实现自定义动画
-        flight_rv.setItemAnimator(new DefaultItemAnimator());
-        //设置滑动监听器 （侧滑）
-        flightRecyclerViewAdapter.setOnSlidListener(this);
+
         requestPermission();
         InitLocation();
         InitIndoorMap();
@@ -147,6 +147,16 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
 
     }
     public void InitFloatMenuBt(){
+        menuLayout.mMainButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    if (main_message.getVisibility() == View.VISIBLE){
+                        animateClose(main_message);
+                        animationIvClose(main_left);
+                    }
+                menuLayout.popupMenu();
+            }
+        });
 
         menuLayout.setMainButtonColorAndIcon(R.color.colorWhite,R.mipmap.ic_add_black_36dp)
                 .setListImageResource(R.drawable.flight32,R.drawable.entertainment32,R.drawable.toilet32,R.drawable.shop32,R.drawable.repay32)
@@ -182,6 +192,7 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
 
                     @Override
                     public void onImageItemClickListener(int position, int resId) {
+
                        // Toast.makeText(MainActivity.this,"positiion"+position+":"+resId,Toast.LENGTH_SHORT).show();
                         if(position==0){//显示所有航班
                             Intent intent = new Intent(MainActivity.this, MessageActivity.class);
@@ -641,5 +652,88 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
             }
         }
         return false;
+    }
+    @OnClick(R.id.main_left)
+    public void main_left_OnClick(){
+        if (main_message.getVisibility() == View.GONE){
+
+            animateOpen(main_message);
+            animationIvOpen(main_left);
+            if(menuLayout.isStart) {
+                menuLayout.popupMenu();
+            }
+        }else {
+            animateClose(main_message);
+            animationIvClose(main_left);
+        }
+    }
+    @BindView(R.id.main_message)
+    LinearLayout main_message;
+    @BindView(R.id.main_left)
+    ImageView main_left;
+    //动画
+    private float mDensity;
+    private int mHiddenViewMeasuredHeight;
+    private void animateOpen(View v) {
+        v.setVisibility(View.VISIBLE);
+//        int w = View.MeasureSpec.makeMeasureSpec(0,
+//                View.MeasureSpec.UNSPECIFIED);
+//        int h = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+//        v.measure(w, h);
+        // 隐藏部分布局的高度
+        mDensity = getResources().getDisplayMetrics().density;
+        mHiddenViewMeasuredHeight = (int) (mDensity * 210 + 0.5);
+//        mHiddenViewMeasuredHeight = (int) v.getMeasuredHeight();
+        ValueAnimator animator = createDropAnimator(v, 0,
+                mHiddenViewMeasuredHeight);
+        animator.start();
+    }
+
+    private void animationIvOpen(ImageView view) {
+        //旋转动画
+        RotateAnimation animation = new RotateAnimation(0, 180,
+                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                0.5f);
+        animation.setFillAfter(true);
+        animation.setDuration(100);
+        view.startAnimation(animation);
+    }
+
+    private void animationIvClose(ImageView view) {
+        RotateAnimation animation = new RotateAnimation(180, 0,
+                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                0.5f);
+        animation.setFillAfter(true);
+        animation.setDuration(100);
+        view.startAnimation(animation);
+    }
+
+    private void animateClose(final View view) {
+        int origHeight = view.getHeight();
+        ValueAnimator animator = createDropAnimator(view, origHeight, 0);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                view.setVisibility(View.GONE);
+            }
+
+        });
+        animator.start();
+    }
+
+    private ValueAnimator createDropAnimator(final View v, int start, int end) {
+        ValueAnimator animator = ValueAnimator.ofInt(start, end);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator arg0) {
+                int value = (int) arg0.getAnimatedValue();
+                ViewGroup.LayoutParams layoutParams = v.getLayoutParams();
+                layoutParams.height = value;
+                v.setLayoutParams(layoutParams);
+
+            }
+        });
+        return animator;
     }
 }
