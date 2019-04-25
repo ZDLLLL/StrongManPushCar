@@ -19,7 +19,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
-                android:background="#03A9F4">
+                android:background="@drawable/kfc">
 
                 <ImageView
                     android:id="@+id/shopping_back"
@@ -29,23 +29,32 @@
                     android:layout_marginTop="20dp"
                     android:src="@drawable/back" />
             </LinearLayout>
-
-            <com.makeramen.roundedimageview.RoundedImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+            <LinearLayout
+                android:background="@drawable/circle"
                 android:layout_gravity="right"
-                android:layout_marginTop="-40dp"
-                android:layout_marginRight="20dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/love"
-                app:riv_oval="true" />
+                android:layout_marginTop="-30dp"
+                android:layout_marginRight="40dp"
+                android:orientation="vertical"
+                android:layout_width="60dp"
+                android:layout_height="60dp">
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/shopping_love_img"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="40dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerInside"
+                    android:layout_height="40dp"
+                    android:src="@drawable/heart"
+                    app:riv_oval="true" />
+            </LinearLayout>
+
 
             <com.makeramen.roundedimageview.RoundedImageView
                 android:layout_width="160dp"
                 android:layout_height="160dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="-140dp"
-                android:src="@drawable/image_1"
+                android:src="@drawable/kfc"
                 app:riv_oval="true" />
 
             <TextView
@@ -54,7 +63,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:text="邦邦小吃"
+                android:text="肯德基"
                 android:textColor="#000"
                 android:textSize="40sp" />
 

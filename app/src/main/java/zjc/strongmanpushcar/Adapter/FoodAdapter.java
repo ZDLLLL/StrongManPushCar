@@ -34,6 +34,9 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
     @Override
     public void onBindViewHolder(@NonNull FoodViewHolder foodViewHolder, int i) {
         foodViewHolder.food_name.setText(list.get(i).getFoodName());
+        foodViewHolder.food_price.setText(list.get(i).getFoodPrice());
+        foodViewHolder.food_sale.setText(list.get(i).getFoodIntrouduce());
+
     }
 
     @Override

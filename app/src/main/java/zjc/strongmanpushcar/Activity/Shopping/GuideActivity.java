@@ -72,6 +72,7 @@ public class GuideActivity extends BaseActivity {
         guide_store_rv.setLayoutManager(new GridLayoutManager(this,3,GridLayoutManager.VERTICAL,false));
         storeAdapter = new StoreAdapter(this,getStoreData(),this);
         guide_store_rv.setAdapter(storeAdapter);
+
     }
     public List<Store> getStoreData(){
         List<Store> list = new ArrayList<>();
@@ -117,8 +118,8 @@ public class GuideActivity extends BaseActivity {
          }
      });
         List<String> img = new ArrayList<String>();
-        img.add("http://www.mcartoria.com:8080/Health/images/lun2.jpg");
-        img.add("http://www.mcartoria.com:8080/Health/images/lun1.jpg");
+        img.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1556098253671&di=548fab2d687e61c058b22bdb5a04b0af&imgtype=0&src=http%3A%2F%2Fwx3.sinaimg.cn%2Flarge%2F4ad81cefly1fedyjf7vjij20g4092wg2.jpg");
+        img.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1556098321959&di=5c5472bd0de75ee1b95573fbd8b2f058&imgtype=0&src=http%3A%2F%2Fimage1.juanlaoda.com%2FQMMImg%2F2014%2F12%2F23%2F161231330.jpg");
         //设置Banner的布局，图片和文字
         guide_banner.setData(R.layout.item_fresco,img,null);
         //设置Banner的点击事件

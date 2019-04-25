@@ -58,6 +58,7 @@ public class StoreMessageFragment extends DialogFragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ShoppingActivity.class);
                 getActivity().startActivity(intent);
+                dialog.dismiss();
             }
         });
     }

@@ -1,8 +1,17 @@
 package zjc.strongmanpushcar.Beans;
 
 public class FoodCatergory {
+    public String CatergryId;
     public String CatergryImage;
     public String CatergryName;
+
+    public String getCatergryId() {
+        return CatergryId;
+    }
+
+    public void setCatergryId(String catergryId) {
+        CatergryId = catergryId;
+    }
 
     public String getCatergryImage() {
         return CatergryImage;

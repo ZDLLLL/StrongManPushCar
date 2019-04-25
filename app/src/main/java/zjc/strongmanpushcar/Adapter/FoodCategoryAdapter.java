@@ -68,7 +68,7 @@ public class FoodCategoryAdapter extends RecyclerView.Adapter<FoodCategoryAdapte
        //判断该项是否点击
        if (isClicks.get(i)){
            categoryViewHolder.catergory_ll.setBackgroundColor(Color.WHITE);
-           shoppingActivity.getFood(i);
+           shoppingActivity.getFood(list.get(i).getCatergryId());
        }else{
            categoryViewHolder.catergory_ll.setBackgroundColor(Color.argb(180,241,241,241));
        }

@@ -1,8 +1,11 @@
 package zjc.strongmanpushcar.Activity.Shopping;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,52 +38,49 @@ public class ShoppingActivity extends BaseActivity {
         String shopid = "2";
         shoppingServer.getClassifyListByshopId(shopid);
     }
-    public void CatergoryCallBack(List<FoodCatergory> list){
-        catergory_rv.setLayoutManager(new LinearLayoutManager(this));
-        foodCategoryAdapter = new FoodCategoryAdapter(this, list,this);
-        catergory_rv.setAdapter(foodCategoryAdapter);
+    public void CatergoryCallBack(final List<FoodCatergory> list){
+         runOnUiThread(new Runnable() {
+             @Override
+             public void run() {
+                 catergory_rv.setLayoutManager(new LinearLayoutManager(ShoppingActivity.this));
+                 foodCategoryAdapter = new FoodCategoryAdapter(ShoppingActivity.this, list,ShoppingActivity.this);
+                 catergory_rv.setAdapter(foodCategoryAdapter);
+             }
+         });
+
     }
-    public void getFood(int i){
-        if (i==0){
-            food_rv.setLayoutManager(new LinearLayoutManager(this));
-            foodAdapter = new FoodAdapter(this,getFoodDate());
-            food_rv.setAdapter(foodAdapter);
-        }else {
-            food_rv.setLayoutManager(new LinearLayoutManager(this));
-            foodAdapter = new FoodAdapter(this,getFoodDate2());
-            food_rv.setAdapter(foodAdapter);
-        }
+    public void getFood(String i){
+        shoppingServer.getGoodsByClassifyId(i);
+
+    }
+    public void FoodCallBack(final List<Food> list){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                food_rv.setLayoutManager(new LinearLayoutManager(ShoppingActivity.this));
+                foodAdapter = new FoodAdapter(ShoppingActivity.this,list);
+                food_rv.setAdapter(foodAdapter);
+            }
+        });
 
     }
 
-    public List<Food> getFoodDate(){
-        List<Food>  foodlist = new ArrayList<>();
-        Food food = new Food();
-        food.setFoodName("渣渣涛");
-        foodlist.add(food);
-        food = new Food();
-        food.setFoodName("渣涛");
-        foodlist.add(food);
-        food = new Food();
-        food.setFoodName("涛");
-        foodlist.add(food);
-        return foodlist;
-    }
-    public List<Food> getFoodDate2(){
-        List<Food>  foodlist = new ArrayList<>();
-        Food food = new Food();
-        food.setFoodName("周董涛");
-        foodlist.add(food);
-        food = new Food();
-        food.setFoodName("董涛");
-        foodlist.add(food);
-        food = new Food();
-        food.setFoodName("涛");
-        foodlist.add(food);
-        return foodlist;
-    }
     @OnClick(R.id.shopping_back)
     public void shopping_back_OnClick(){
         finish();
+    }
+    @BindView(R.id.shopping_love_img)
+    ImageView shopping_love_img;
+    private static int i = 0;
+    @OnClick(R.id.shopping_love_img)
+    public void shopping_love_img_OnClick(){
+        if (i == 0){
+            shopping_love_img.setImageResource(R.drawable.heart_click);
+            i++;
+        }else {
+            shopping_love_img.setImageResource(R.drawable.heart);
+            i--;
+        }
+
     }
 }

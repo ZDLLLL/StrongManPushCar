@@ -1,10 +1,19 @@
 package zjc.strongmanpushcar.Beans;
 
 public class Food {
+    String FoodId;
     String Foodimg;
     String FoodName;
     String FoodPrice;
-    String FoodSale;
+    String FoodIntrouduce;
+
+    public String getFoodId() {
+        return FoodId;
+    }
+
+    public void setFoodId(String foodId) {
+        FoodId = foodId;
+    }
 
     public String getFoodimg() {
         return Foodimg;
@@ -30,11 +39,11 @@ public class Food {
         FoodPrice = foodPrice;
     }
 
-    public String getFoodSale() {
-        return FoodSale;
+    public String getFoodIntrouduce() {
+        return FoodIntrouduce;
     }
 
-    public void setFoodSale(String foodSale) {
-        FoodSale = foodSale;
+    public void setFoodIntrouduce(String foodIntrouduce) {
+        FoodIntrouduce = foodIntrouduce;
     }
 }
