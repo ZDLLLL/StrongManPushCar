@@ -77,11 +77,11 @@ public class MenuLayout extends RelativeLayout {
     //图片资源
     private List<Integer> mListImageResoureId;
 
-    private FloatingActionButton mMainButton;//主按钮
+    public FloatingActionButton mMainButton;//主按钮
 
     private View mAlphaView; //透明view
     private LinearLayout menuLayout;
-    private boolean isStart = false;//是否打开了菜单
+    public boolean isStart = false;//是否打开了菜单
 
 
     //固定大小参数

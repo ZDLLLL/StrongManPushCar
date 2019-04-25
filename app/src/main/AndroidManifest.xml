@@ -88,11 +88,7 @@
             android:name=".Activity.Login.LoginActivity"
 
             android:screenOrientation="landscape" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <meta-data
             android:name="com.amap.api.v2.apikey"
@@ -122,7 +118,11 @@
         <activity
             android:name=".Activity.MainActivity"
             android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.baidu.ocr.ui.camera.CameraActivity"
