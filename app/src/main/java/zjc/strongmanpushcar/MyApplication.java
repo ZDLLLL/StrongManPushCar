@@ -9,6 +9,9 @@ import android.support.multidex.MultiDex;
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.inuker.bluetooth.library.BluetoothContext;
+
+import java.util.UUID;
 
 public class MyApplication extends Application {
     private static Context context;//上下文 并生成get方法
@@ -17,7 +20,11 @@ public class MyApplication extends Application {
     private SharedPreferences.Editor editor;//让sharedPreferences处于编辑状态
     public static String IdCard ;
     public static String Name;
-
+    private static MyApplication instance;
+    //蓝牙小车的服务和特征UUID
+    public static UUID Server;
+    public static UUID Characteristic;
+    public static String Mac;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -30,10 +37,41 @@ public class MyApplication extends Application {
         //自4.3.0起，百度地图SDK所有接口均支持百度坐标和国测局坐标，用此方法设置您使用的坐标类型.
         //包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
         SDKInitializer.setCoordType(CoordType.BD09LL);
+        //图片加载的初始化
         Fresco.initialize(this);
         MultiDex.install(this);
+        //蓝牙加载的初始化
+        instance = this;
+        BluetoothContext.set(this);
     }
 
+    public static String getMac() {
+        return Mac;
+    }
+
+    public static void setMac(String mac) {
+        Mac = mac;
+    }
+
+    public static UUID getServer() {
+        return Server;
+    }
+
+    public static void setServer(UUID server) {
+        Server = server;
+    }
+
+    public static UUID getCharacteristic() {
+        return Characteristic;
+    }
+
+    public static void setCharacteristic(UUID characteristic) {
+        Characteristic = characteristic;
+    }
+
+    public static Application getInstance() {
+        return instance;
+    }
     public static String getName() {
         return Name;
     }

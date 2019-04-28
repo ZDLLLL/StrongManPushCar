@@ -1,11 +1,15 @@
 package zjc.strongmanpushcar.Activity.Login;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.ocr.sdk.OCR;
@@ -19,8 +23,11 @@ import com.baidu.ocr.ui.camera.CameraNativeHelper;
 import com.baidu.ocr.ui.camera.CameraView;
 
 import java.io.File;
+import java.util.ArrayList;
 
+import butterknife.BindView;
 import butterknife.OnClick;
+import zjc.strongmanpushcar.Activity.BlueTooth.BlueToothActivity;
 import zjc.strongmanpushcar.Activity.MainActivity;
 import zjc.strongmanpushcar.BaseTools.BaseActivity;
 import zjc.strongmanpushcar.BaseTools.FileUtil;
@@ -29,10 +36,12 @@ import zjc.strongmanpushcar.R;
 
 public class LoginActivity extends BaseActivity {
     private static final int REQUEST_CODE_CAMERA = 102;
+    private static final int REQUEST_CODE_BLUTOOTH = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        requestPermission();
         initAccessTokenWithAkSk();
     }
     @OnClick(R.id.idcard_bt)
@@ -48,6 +57,15 @@ public class LoginActivity extends BaseActivity {
         intent.putExtra(CameraActivity.KEY_CONTENT_TYPE, CameraActivity.CONTENT_TYPE_ID_CARD_FRONT);
         startActivityForResult(intent, REQUEST_CODE_CAMERA);
     }
+    @BindView(R.id.login_blueTooth)
+    TextView login_blueTooth;
+    //扫描设备跳转按钮
+    @OnClick(R.id.login_blueTooth)
+    public void login_blueTooth_OnClick(){
+        Intent intent = new Intent(this, BlueToothActivity.class);
+        startActivityForResult(intent,REQUEST_CODE_BLUTOOTH);
+    }
+    //初始化百度文字识别
     private void initAccessTokenWithAkSk() {
         OCR.getInstance(this).initAccessTokenWithAkSk(new OnResultListener<AccessToken>() {
             @Override
@@ -101,7 +119,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        //文字识别的返回
         if (requestCode == REQUEST_CODE_CAMERA && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 String contentType = data.getStringExtra(CameraActivity.KEY_CONTENT_TYPE);
@@ -113,6 +131,11 @@ public class LoginActivity extends BaseActivity {
                         recIDCard(IDCardParams.ID_CARD_SIDE_BACK, filePath);
                     }
                 }
+            }
+        } else if (requestCode == REQUEST_CODE_BLUTOOTH && resultCode ==Activity.RESULT_OK){
+            //蓝牙搜索的返回
+            if (data != null){
+                login_blueTooth.setText(data.toString());
             }
         }
     }
@@ -171,6 +194,49 @@ public class LoginActivity extends BaseActivity {
             }
         });
     }
+    /**
+     * Android6.0之后需要动态申请权限
+     */
+    private static boolean isPermissionRequested = false;
+    private void requestPermission() {
+        if (Build.VERSION.SDK_INT >= 23 && !isPermissionRequested) {
+
+            isPermissionRequested = true;
+
+            ArrayList<String> permissionsList = new ArrayList<>();
+
+            String[] permissions = {
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.ACCESS_NETWORK_STATE,
+                    Manifest.permission.INTERNET,
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.MODIFY_AUDIO_SETTINGS,
+                    Manifest.permission.WRITE_SETTINGS,
+                    Manifest.permission.ACCESS_WIFI_STATE,
+                    Manifest.permission.CHANGE_WIFI_STATE,
+                    Manifest.permission.CHANGE_WIFI_MULTICAST_STATE
+            };
+
+            for (String perm : permissions) {
+                if (PackageManager.PERMISSION_GRANTED != checkSelfPermission(perm)) {
+                    permissionsList.add(perm);
+                    // 进入到这里代表没有权限.
+                }
+            }
+
+            if (permissionsList.isEmpty()) {
+                return;
+            } else {
+                requestPermissions(permissionsList.toArray(new String[permissionsList.size()]), 0);
+            }
+        }
+    }
+
+
     @Override
     protected void onDestroy() {
         CameraNativeHelper.release();

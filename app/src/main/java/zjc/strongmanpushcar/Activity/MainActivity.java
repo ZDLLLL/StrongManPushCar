@@ -56,6 +56,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import zjc.strongmanpushcar.Activity.BlueTooth.ReturnCarFragment;
 import zjc.strongmanpushcar.Activity.Entertainment.MovieActivity;
 import zjc.strongmanpushcar.Activity.Message.MessageActivity;
 import zjc.strongmanpushcar.Activity.Shopping.GuideActivity;
@@ -93,7 +94,7 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
     BaseStripAdapter mFloorListAdapter;
     MapBaseIndoorMapInfo mMapBaseIndoorMapInfo = null;
     RelativeLayout layout;
-    private static boolean isPermissionRequested = false;
+
     private MyOrientationListener myOrientationListener;
     @BindView(R.id.mainsearch_content_et)
     EditText mainsearch_content_et;
@@ -117,7 +118,7 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
         layout.addView(stripListView);
         mFloorListAdapter = new BaseStripAdapter(this);
 
-        requestPermission();
+
         InitLocation();
         InitIndoorMap();
         initOritationListener();
@@ -213,7 +214,8 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
                             Intent intent = new Intent(MainActivity.this,GuideActivity.class);
                             startActivity(intent);
                         }else {//还车
-
+                            ReturnCarFragment returnCarFragment = new ReturnCarFragment();
+                            returnCarFragment.show(MainActivity.this.getSupportFragmentManager(),"ReturnCarFragment");
                         }
                         menuLayout.popupMenu();
                     }
@@ -481,48 +483,7 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
 //
 //        Toast.makeText(MainActivity.this, "室内图已关闭", Toast.LENGTH_SHORT).show();
 //    }
-    /**
-     * Android6.0之后需要动态申请权限
-     */
-    private void requestPermission() {
-        if (Build.VERSION.SDK_INT >= 23 && !isPermissionRequested) {
 
-            isPermissionRequested = true;
-
-            ArrayList<String> permissionsList = new ArrayList<>();
-
-            String[] permissions = {
-                    Manifest.permission.RECORD_AUDIO,
-                    Manifest.permission.ACCESS_NETWORK_STATE,
-                    Manifest.permission.INTERNET,
-                    Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.MODIFY_AUDIO_SETTINGS,
-                    Manifest.permission.WRITE_SETTINGS,
-                    Manifest.permission.ACCESS_WIFI_STATE,
-                    Manifest.permission.CHANGE_WIFI_STATE,
-                    Manifest.permission.CHANGE_WIFI_MULTICAST_STATE
-
-
-            };
-
-            for (String perm : permissions) {
-                if (PackageManager.PERMISSION_GRANTED != checkSelfPermission(perm)) {
-                    permissionsList.add(perm);
-                    // 进入到这里代表没有权限.
-                }
-            }
-
-            if (permissionsList.isEmpty()) {
-                return;
-            } else {
-                requestPermissions(permissionsList.toArray(new String[permissionsList.size()]), 0);
-            }
-        }
-    }
     /**
      * 初始化方向传感器
      */
