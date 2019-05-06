@@ -26,6 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
         <Button
+            android:id="@+id/Zxing_bt"
             android:textSize="45sp"
             android:text="扫 码 登 陆"
             android:layout_marginRight="120dp"
@@ -44,5 +45,9 @@
             android:layout_width="350dp"
             android:layout_height="350dp" />
     </LinearLayout>
-
+    <ImageView
+        android:id="@+id/login_zxing_iv"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_centerInParent="true"/>
 </RelativeLayout>

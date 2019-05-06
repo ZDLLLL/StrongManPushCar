@@ -4,11 +4,13 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ import com.baidu.ocr.sdk.model.IDCardResult;
 import com.baidu.ocr.ui.camera.CameraActivity;
 import com.baidu.ocr.ui.camera.CameraNativeHelper;
 import com.baidu.ocr.ui.camera.CameraView;
+import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -44,6 +47,15 @@ public class LoginActivity extends BaseActivity {
         requestPermission();
         initAccessTokenWithAkSk();
     }
+    //二维码登陆
+    @BindView(R.id.login_zxing_iv)
+    ImageView login_zxing_iv;
+    @OnClick(R.id.Zxing_bt)
+    public void Zxing_bt_OnClick(){
+        Bitmap bitmap = CodeUtils.createImage("123",400,400,null);
+        login_zxing_iv.setImageBitmap(bitmap);
+    }
+    //身份证登陆
     @OnClick(R.id.idcard_bt)
     public void idcard_OnClick(){
         Intent intent = new Intent(LoginActivity.this, CameraActivity.class);
