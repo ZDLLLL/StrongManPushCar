@@ -1,5 +1,6 @@
 package zjc.strongmanpushcar.Activity.Shopping;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,11 +13,13 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import zjc.strongmanpushcar.Activity.Map.GaoDeNavActivity;
 import zjc.strongmanpushcar.Adapter.FoodAdapter;
 import zjc.strongmanpushcar.Adapter.FoodCategoryAdapter;
 import zjc.strongmanpushcar.BaseTools.BaseActivity;
 import zjc.strongmanpushcar.Beans.Food;
 import zjc.strongmanpushcar.Beans.FoodCatergory;
+import zjc.strongmanpushcar.MyApplication;
 import zjc.strongmanpushcar.R;
 import zjc.strongmanpushcar.Servers.Server.ShoppingServer;
 import zjc.strongmanpushcar.Servers.ServerImp.ShoppingServerImp;
@@ -30,13 +33,14 @@ public class ShoppingActivity extends BaseActivity {
     FoodCategoryAdapter foodCategoryAdapter;
 
     ShoppingServer shoppingServer;
+    static String ShopId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping);
         shoppingServer = new ShoppingServerImp(this);
-        String shopid = "2";
-        shoppingServer.getClassifyListByshopId(shopid);
+        ShopId=getIntent().getStringExtra("shopId");
+        shoppingServer.getClassifyListByshopId("2");
     }
     public void CatergoryCallBack(final List<FoodCatergory> list){
          runOnUiThread(new Runnable() {
@@ -64,23 +68,32 @@ public class ShoppingActivity extends BaseActivity {
         });
 
     }
+    @OnClick(R.id.tohere_ll)
+    public void tohere_ll_Onlick(){
+        Intent intent=new Intent(ShoppingActivity.this, GaoDeNavActivity.class);
+        intent.putExtra("endLongitude", MyApplication.getStoreLongitude());
+        intent.putExtra("endLatitude",MyApplication.getStoreLatitude());
+        intent.putExtra("startLatitude",MyApplication.getmCurrentLantitude());
+        intent.putExtra("startLongitude",MyApplication.getmCurrentLongitude());
+        startActivity(intent);
+    }
 
     @OnClick(R.id.shopping_back)
     public void shopping_back_OnClick(){
         finish();
     }
-    @BindView(R.id.shopping_love_img)
-    ImageView shopping_love_img;
-    private static int i = 0;
-    @OnClick(R.id.shopping_love_img)
-    public void shopping_love_img_OnClick(){
-        if (i == 0){
-            shopping_love_img.setImageResource(R.drawable.heart_click);
-            i++;
-        }else {
-            shopping_love_img.setImageResource(R.drawable.heart);
-            i--;
-        }
-
-    }
+//    @BindView(R.id.shopping_love_img)
+//    ImageView shopping_love_img;
+//    private static int i = 0;
+//    @OnClick(R.id.shopping_love_img)
+//    public void shopping_love_img_OnClick(){
+//        if (i == 0){
+//            shopping_love_img.setImageResource(R.drawable.heart_click);
+//            i++;
+//        }else {
+//            shopping_love_img.setImageResource(R.drawable.heart);
+//            i--;
+//        }
+//
+//    }
 }

@@ -17,6 +17,7 @@ import java.util.List;
 import zjc.strongmanpushcar.Activity.Shopping.GuideActivity;
 import zjc.strongmanpushcar.Activity.Shopping.View.StoreMessageFragment;
 import zjc.strongmanpushcar.Beans.Store;
+import zjc.strongmanpushcar.MyApplication;
 import zjc.strongmanpushcar.R;
 
 public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHodler> {
@@ -38,11 +39,17 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHod
     }
 
     @Override
-    public void onBindViewHolder(@NonNull StoreViewHodler storeViewHodler, int i) {
+    public void onBindViewHolder(@NonNull StoreViewHodler storeViewHodler, final int i) {
         storeViewHodler.store_name.setText(list.get(i).getStoreName());
         storeViewHodler.store_fl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MyApplication.setShopname(list.get(i).getStoreName());
+                MyApplication.setShopimage(list.get(i).getStoreImg());
+                MyApplication.setShopprice(list.get(i).getAverconsumption());
+                MyApplication.setStoreLongitude(Double.parseDouble(list.get(i).getLongitude()));
+                MyApplication.setStoreLatitude(Double.parseDouble(list.get(i).getLatitude()));
+                MyApplication.setShopId(list.get(i).getShopId());
                 StoreMessageFragment storeMessageFragment = new StoreMessageFragment();
                 storeMessageFragment.show(guideActivity.getSupportFragmentManager(),"storeMessageFragment");
             }

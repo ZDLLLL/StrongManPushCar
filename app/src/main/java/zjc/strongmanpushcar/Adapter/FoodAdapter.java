@@ -10,10 +10,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 import zjc.strongmanpushcar.Beans.Food;
+import zjc.strongmanpushcar.MyApplication;
 import zjc.strongmanpushcar.R;
+
+import static zjc.strongmanpushcar.MyApplication.getContext;
 
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder> {
     public Context context;
@@ -36,7 +41,11 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         foodViewHolder.food_name.setText(list.get(i).getFoodName());
         foodViewHolder.food_price.setText(list.get(i).getFoodPrice());
         foodViewHolder.food_sale.setText(list.get(i).getFoodIntrouduce());
-
+        Glide.with(getContext())
+                .load(list.get(i).getFoodimg())
+                .asBitmap()
+                .error(R.drawable.image_1)
+                .into(foodViewHolder.food_img);
     }
 
     @Override

@@ -11,12 +11,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import zjc.strongmanpushcar.Activity.Shopping.GuideActivity;
 import zjc.strongmanpushcar.Beans.StoreClassification;
 import zjc.strongmanpushcar.R;
+
+import static zjc.strongmanpushcar.MyApplication.getContext;
 
 public class ClassificationAdapter extends RecyclerView.Adapter<ClassificationAdapter.ClassificationViewHodler>{
     public Context context;
@@ -64,6 +68,12 @@ public class ClassificationAdapter extends RecyclerView.Adapter<ClassificationAd
                 notifyDataSetChanged();//通知Adpter改变
             }
         });
+        Glide.with(getContext())
+                .load(list.get(i).getClassificationImg())
+                .asBitmap()
+                .error(R.drawable.love)
+                .into(classificationViewHodler.catergory_img);
+
     }
 
 

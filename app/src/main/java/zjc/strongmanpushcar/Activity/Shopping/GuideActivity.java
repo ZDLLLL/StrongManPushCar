@@ -23,42 +23,55 @@ import zjc.strongmanpushcar.BaseTools.BaseActivity;
 import zjc.strongmanpushcar.Beans.Store;
 import zjc.strongmanpushcar.Beans.StoreClassification;
 import zjc.strongmanpushcar.R;
+import zjc.strongmanpushcar.Servers.Server.ShoppingServer;
+import zjc.strongmanpushcar.Servers.ServerImp.ShoppingServerImp;
 
 public class GuideActivity extends BaseActivity {
     BGABanner guide_banner;
+    ShoppingServer shoppingServer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide);
         guide_banner = findViewById(R.id.guide_banner);
+        shoppingServer=new ShoppingServerImp(this);
+        guide_store_rv.setLayoutManager(new GridLayoutManager(this,3,GridLayoutManager.VERTICAL,false));
+        guide_claai_rv.setLayoutManager(new LinearLayoutManager(this));
+        shoppingServer.findAllShopType();
         initBanner();
-        initClassification();
+//        initClassification();
     }
     //左侧分类栏布局
     @BindView(R.id.guide_claai_rv)
     RecyclerView guide_claai_rv;
     ClassificationAdapter classificationAdapter;
-    public void initClassification(){
-        guide_claai_rv.setLayoutManager(new LinearLayoutManager(this));
-        classificationAdapter = new ClassificationAdapter(this,getClassiData(),this);
-        guide_claai_rv.setAdapter(classificationAdapter);
+    public void initClassification(List<StoreClassification> list){
+
+        classificationAdapter = new ClassificationAdapter(this,list,this);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                guide_claai_rv.setAdapter(classificationAdapter);
+            }
+        });
+
     }
-    public List<StoreClassification> getClassiData(){
-        List<StoreClassification> list = new ArrayList<>();
-        StoreClassification store = new StoreClassification();
-        store.setClassificationName("推荐");
-        list.add(store);
-        store = new StoreClassification();
-        store.setClassificationName("热门");
-        list.add(store);
-        store = new StoreClassification();
-        store.setClassificationName("吃货");
-        list.add(store);
-        store = new StoreClassification();
-        store.setClassificationName("纪念品");
-        list.add(store);
-        return list;
-    }
+//    public List<StoreClassification> getClassiData(){
+//        List<StoreClassification> list = new ArrayList<>();
+//        StoreClassification store = new StoreClassification();
+//        store.setClassificationName("推荐");
+//        list.add(store);
+//        store = new StoreClassification();
+//        store.setClassificationName("热门");
+//        list.add(store);
+//        store = new StoreClassification();
+//        store.setClassificationName("吃货");
+//        list.add(store);
+//        store = new StoreClassification();
+//        store.setClassificationName("纪念品");
+//        list.add(store);
+//        return list;
+//    }
     @BindView(R.id.guide_store_rv)
     RecyclerView guide_store_rv;
     StoreAdapter storeAdapter;
@@ -69,42 +82,17 @@ public class GuideActivity extends BaseActivity {
         }else {
             guide_banner.setVisibility(View.VISIBLE);
         }
-        guide_store_rv.setLayoutManager(new GridLayoutManager(this,3,GridLayoutManager.VERTICAL,false));
-        storeAdapter = new StoreAdapter(this,getStoreData(),this);
-        guide_store_rv.setAdapter(storeAdapter);
-
+        shoppingServer.findShopByType(i);
     }
-    public List<Store> getStoreData(){
-        List<Store> list = new ArrayList<>();
-        Store store = new Store();
-        store.setStoreName("肯德基");
-        list.add(store);
-        store = new Store();
-        store.setStoreName("德克士");
-        list.add(store);
-        store = new Store();
-        store.setStoreName("必胜客");
-        list.add(store);
-        store = new Store();
-        store.setStoreName("肯德基");
-        list.add(store);
-        store = new Store();
-        store.setStoreName("肯德基");
-        list.add(store);
-        store = new Store();
-        store.setStoreName("肯德基");
-        list.add(store);
-        store = new Store();
-        store.setStoreName("肯德基");
-        list.add(store);
-        store = new Store();
-        store.setStoreName("肯德基");
-        list.add(store);
-        store = new Store();
-        store.setStoreName("肯德基");
-        list.add(store);
+    public void getStoreData(List<Store> list){
+        storeAdapter = new StoreAdapter(this,list,this);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                guide_store_rv.setAdapter(storeAdapter);
+            }
+        });
 
-        return list;
     }
     //轮播图布局
     public void initBanner(){
