@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-//    signingConfigs {
-//        debug {
-//            keyAlias 'key0'
-//            keyPassword '000000'
-//            storeFile file('D:/CarTest/导航.jks')
-//            storePassword '000000'
-//        }
-//    }
+    signingConfigs {
+        debug {
+            keyAlias 'key0'
+            keyPassword '000000'
+            storeFile file('D:/CarTest/导航.jks')
+            storePassword '000000'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "zjc.strongmanpushcar"

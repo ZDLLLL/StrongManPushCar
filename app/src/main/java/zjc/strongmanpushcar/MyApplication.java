@@ -25,6 +25,14 @@ public class MyApplication extends Application {
     public static UUID Server;
     public static UUID Characteristic;
     public static String Mac;
+    public static String shopname;
+    public static String shopprice;
+    public static String shopimage;
+    public static double storeLongitude;//经度
+    public static double storeLatitude;//纬度
+    public static double mCurrentLongitude;//经度
+    public static double mCurrentLantitude;//纬度
+    public static String ShopId;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -43,6 +51,30 @@ public class MyApplication extends Application {
         //蓝牙加载的初始化
         instance = this;
         BluetoothContext.set(this);
+    }
+
+    public static String getShopname() {
+        return shopname;
+    }
+
+    public static void setShopname(String shopname) {
+        MyApplication.shopname = shopname;
+    }
+
+    public static String getShopprice() {
+        return shopprice;
+    }
+
+    public static void setShopprice(String shopprice) {
+        MyApplication.shopprice = shopprice;
+    }
+
+    public static String getShopimage() {
+        return shopimage;
+    }
+
+    public static void setShopimage(String shopimage) {
+        MyApplication.shopimage = shopimage;
     }
 
     public static String getMac() {
@@ -94,5 +126,45 @@ public class MyApplication extends Application {
 
     public static void setContext(Context context) {
         MyApplication.context = context;
+    }
+
+    public static double getStoreLongitude() {
+        return storeLongitude;
+    }
+
+    public static void setStoreLongitude(double storeLongitude) {
+        MyApplication.storeLongitude = storeLongitude;
+    }
+
+    public static double getStoreLatitude() {
+        return storeLatitude;
+    }
+
+    public static void setStoreLatitude(double storeLatitude) {
+        MyApplication.storeLatitude = storeLatitude;
+    }
+
+    public static double getmCurrentLongitude() {
+        return mCurrentLongitude;
+    }
+
+    public static void setmCurrentLongitude(double mCurrentLongitude) {
+        MyApplication.mCurrentLongitude = mCurrentLongitude;
+    }
+
+    public static double getmCurrentLantitude() {
+        return mCurrentLantitude;
+    }
+
+    public static void setmCurrentLantitude(double mCurrentLantitude) {
+        MyApplication.mCurrentLantitude = mCurrentLantitude;
+    }
+
+    public static String getShopId() {
+        return ShopId;
+    }
+
+    public static void setShopId(String shopId) {
+        ShopId = shopId;
     }
 }

@@ -6,6 +6,7 @@ public class Food {
     String FoodName;
     String FoodPrice;
     String FoodIntrouduce;
+    String ShopLeftClassifyId;
 
     public String getFoodId() {
         return FoodId;
@@ -45,5 +46,13 @@ public class Food {
 
     public void setFoodIntrouduce(String foodIntrouduce) {
         FoodIntrouduce = foodIntrouduce;
+    }
+
+    public String getShopLeftClassifyId() {
+        return ShopLeftClassifyId;
+    }
+
+    public void setShopLeftClassifyId(String shopLeftClassifyId) {
+        ShopLeftClassifyId = shopLeftClassifyId;
     }
 }

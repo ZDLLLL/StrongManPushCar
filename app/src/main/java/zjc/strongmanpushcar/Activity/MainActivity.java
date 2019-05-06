@@ -68,6 +68,7 @@ import zjc.strongmanpushcar.BaseTools.indoorview.BaseStripAdapter;
 import zjc.strongmanpushcar.BaseTools.indoorview.StripListView;
 import zjc.strongmanpushcar.BaseTools.overlayutil.IndoorPoiOverlay;
 import zjc.strongmanpushcar.BaseTools.overlayutil.IndoorRouteOverlay;
+import zjc.strongmanpushcar.MyApplication;
 import zjc.strongmanpushcar.R;
 
 public class MainActivity extends BaseActivity implements OnGetPoiSearchResultListener,BaiduMap.OnBaseIndoorMapListener,FlightRecyclerViewAdapter.onSlidingViewClickListener{
@@ -106,7 +107,9 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
     RecyclerView indoorsearch_rv;
     InDoorSearchAdapter inDoorSearchAdapter;
     @BindView(R.id.menuLayout)MenuLayout menuLayout;
-
+    @BindView(R.id.flight_number_tv)TextView flight_number_tv;
+    @BindView(R.id.gate_tv)TextView gate_tv;
+    @BindView(R.id.departmenttime_tv)TextView departmenttime_tv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -432,7 +435,8 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
             mbaiduMap.setMyLocationData(locData);
             mCurrentLantitude = location.getLatitude();
             mCurrentLongitude = location.getLongitude();
-
+            MyApplication.setmCurrentLantitude(mCurrentLantitude);
+            MyApplication.setmCurrentLongitude(mCurrentLongitude);
             Log.v("zjc","Longitude:"+Longitude+",Latitude:"+Latitude);
 //            mBaiduMap.setMyLocationData(locData);
 
@@ -458,7 +462,7 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
         map.setMyLocationData(locData);
 
         if (isShowLoc) {
-            LatLng centerpos = new LatLng(30.0992120000,120.5168240000); // 北京南站
+            LatLng centerpos = new LatLng(30.0992120000,120.5168240000); // 万达广场
             MapStatus.Builder builder = new MapStatus.Builder();
             builder.target(centerpos).zoom(21.0f);
 //            LatLng ll = new LatLng(bdLocation.getLatitude(), bdLocation.getLongitude());
