@@ -14,8 +14,10 @@
         android:orientation="horizontal">
         <TextView
             android:id="@+id/login_blueTooth"
-            android:text="成功连接"
-            android:textSize="25sp"
+            android:text="未连接设备"
+            android:textSize="20sp"
+            android:layout_marginLeft="20dp"
+            android:textColor="#C1B3B3B3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>

@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +56,24 @@ public class LoginActivity extends BaseActivity {
     public void Zxing_bt_OnClick(){
         Bitmap bitmap = CodeUtils.createImage("123",400,400,null);
         login_zxing_iv.setImageBitmap(bitmap);
+        /** 倒计时5秒，一次1秒 */
+        new CountDownTimer(4*1000,1000){
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                //倒计时的过程中回调该函数
+
+            }
+
+            @Override
+            public void onFinish() {
+                //倒计时结束时回调该函数
+                login_zxing_iv.setImageBitmap(null);
+                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                LoginActivity.this.startActivity(intent);
+
+            }
+        }.start();
     }
     //身份证登陆
     @OnClick(R.id.idcard_bt)
@@ -147,7 +167,7 @@ public class LoginActivity extends BaseActivity {
         } else if (requestCode == REQUEST_CODE_BLUTOOTH && resultCode ==Activity.RESULT_OK){
             //蓝牙搜索的返回
             if (data != null){
-                login_blueTooth.setText(data.toString());
+                login_blueTooth.setText("已连接设备");
             }
         }
     }

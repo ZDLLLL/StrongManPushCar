@@ -1,6 +1,7 @@
 package zjc.strongmanpushcar.Activity.BlueTooth;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -142,7 +143,7 @@ public class BlueToothActivity extends BaseActivity {
                 .setServiceDiscoverRetry(3)
                 .setServiceDiscoverTimeout(10000)
                 .build();
-        //发送连接
+        //发送连接，
         ClientManager.getClient().connect(mac, options, new BleConnectResponse() {
             @Override
             public void onResponse(int code, BleGattProfile profile) {
@@ -150,6 +151,9 @@ public class BlueToothActivity extends BaseActivity {
                     setGattProfile(profile);
                 }
                 bluetooth_connect_tv.setVisibility(View.GONE);
+                Intent intent = new Intent();
+                intent.putExtra("result","成功连接");
+                BlueToothActivity.this.setResult(RESULT_OK,intent);
                 Toast.makeText(BlueToothActivity.this,"设备连接成功",Toast.LENGTH_LONG).show();
             }
         });
