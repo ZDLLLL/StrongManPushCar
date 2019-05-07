@@ -79,7 +79,7 @@ public class StoreMessageFragment extends DialogFragment {
         Glide.with(getContext())
                 .load(MyApplication.getShopimage())
                 .asBitmap()
-                .error(R.drawable.love)
+                .error(R.drawable.kfc)
                 .into(store_mes_img);
         store_mes_bt.setOnClickListener(new View.OnClickListener() {
             @Override

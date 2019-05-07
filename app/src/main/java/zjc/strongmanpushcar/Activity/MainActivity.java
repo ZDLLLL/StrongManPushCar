@@ -7,6 +7,8 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -158,6 +160,13 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
                         animateClose(main_message);
                         animationIvClose(main_left);
                     }
+                    if (menuLayout.isStart){
+                        menuLayout.setBackgroundColor(Color.argb(0,154,154,154));
+                        main_left.setVisibility(View.VISIBLE);
+                    }else {
+                        menuLayout.setBackgroundColor(Color.argb(150,154,154,154));
+                        main_left.setVisibility(View.GONE);
+                    }
                 menuLayout.popupMenu();
             }
         });
@@ -168,15 +177,18 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
                 .setOnItemClickListener(new MenuLayout.OnItemClickListener() {
                     @Override
                     public void onTextItemClickListener(int position, String str) {
-
+                        main_left.setVisibility(View.VISIBLE);
                       //  Toast.makeText(MainActivity.this,"positiion"+position+":"+str,Toast.LENGTH_SHORT).show();
                         if(position==0){//显示所有航班
+                            menuLayout.setBackgroundColor(Color.argb(0,154,154,154));
                             Intent intent = new Intent(MainActivity.this, MessageActivity.class);
                             startActivity(intent);
                         }else if(position==1){//娱乐
+                            menuLayout.setBackgroundColor(Color.argb(0,154,154,154));
                             Intent intent = new Intent(MainActivity.this,MovieActivity.class);
                             startActivity(intent);
                         }else if(position==2){//厕所
+                            menuLayout.setBackgroundColor(Color.argb(0,154,154,154));
                             MapBaseIndoorMapInfo indoorInfo = mbaiduMap.getFocusedBaseIndoorMapInfo();
                             if (indoorInfo == null) {
                                 Toast.makeText(MainActivity.this, "当前无室内图，无法搜索", Toast.LENGTH_LONG).show();
@@ -186,25 +198,31 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
                                     indoorInfo.getID()).poiIndoorWd("厕所");
                             mPoiSearch.searchPoiIndoor(option);
                         }else if(position==3){//导购
+                            menuLayout.setBackgroundColor(Color.argb(0,154,154,154));
                             Intent intent = new Intent(MainActivity.this,GuideActivity.class);
                             startActivity(intent);
                         }else {//还车
-
+                            menuLayout.setBackgroundColor(Color.argb(0,154,154,154));
+                            ReturnCarFragment returnCarFragment = new ReturnCarFragment();
+                            returnCarFragment.show(MainActivity.this.getSupportFragmentManager(),"ReturnCarFragment");
                         }
                         menuLayout.popupMenu();
                     }
 
                     @Override
                     public void onImageItemClickListener(int position, int resId) {
-
+                        main_left.setVisibility(View.VISIBLE);
                        // Toast.makeText(MainActivity.this,"positiion"+position+":"+resId,Toast.LENGTH_SHORT).show();
                         if(position==0){//显示所有航班
+                            menuLayout.setBackgroundColor(Color.argb(0,154,154,154));
                             Intent intent = new Intent(MainActivity.this, MessageActivity.class);
                             startActivity(intent);
                         }else if(position==1){//娱乐
+                            menuLayout.setBackgroundColor(Color.argb(0,154,154,154));
                             Intent intent = new Intent(MainActivity.this,MovieActivity.class);
                             startActivity(intent);
                         }else if(position==2){//厕所
+                            menuLayout.setBackgroundColor(Color.argb(0,154,154,154));
                             MapBaseIndoorMapInfo indoorInfo = mbaiduMap.getFocusedBaseIndoorMapInfo();
                             if (indoorInfo == null) {
                                 Toast.makeText(MainActivity.this, "当前无室内图，无法搜索", Toast.LENGTH_LONG).show();
@@ -214,9 +232,11 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
                                     indoorInfo.getID()).poiIndoorWd("厕所");
                             mPoiSearch.searchPoiIndoor(option);
                         }else if(position==3){//导购
+                            menuLayout.setBackgroundColor(Color.argb(0,154,154,154));
                             Intent intent = new Intent(MainActivity.this,GuideActivity.class);
                             startActivity(intent);
                         }else {//还车
+                            menuLayout.setBackgroundColor(Color.argb(0,154,154,154));
                             ReturnCarFragment returnCarFragment = new ReturnCarFragment();
                             returnCarFragment.show(MainActivity.this.getSupportFragmentManager(),"ReturnCarFragment");
                         }
@@ -618,6 +638,7 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
         }
         return false;
     }
+
     @OnClick(R.id.main_left)
     public void main_left_OnClick(){
         if (main_message.getVisibility() == View.GONE){
