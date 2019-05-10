@@ -7,4 +7,5 @@ public interface ShoppingServer {
     public void findAllShopType();
     public void findShopByType(int shopType);
     public void getGoodsList(String shopId);
+    public void findFlightByTicket(String useIdcard);
 }
