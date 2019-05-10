@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 import zjc.strongmanpushcar.Activity.Shopping.GuideActivity;
@@ -41,6 +43,11 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHod
     @Override
     public void onBindViewHolder(@NonNull StoreViewHodler storeViewHodler, final int i) {
         storeViewHodler.store_name.setText(list.get(i).getStoreName());
+        Glide.with(context)
+                .load(list.get(i).getStoreImg())
+                .asBitmap()
+                .error(R.drawable.kfc)
+                .into(storeViewHodler.store_img);
         storeViewHodler.store_fl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

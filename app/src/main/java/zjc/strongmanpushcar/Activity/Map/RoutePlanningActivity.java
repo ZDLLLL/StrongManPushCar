@@ -405,7 +405,7 @@ public class RoutePlanningActivity extends BaseActivity implements BaiduMap.OnBa
 
             Log.v("zjc", "Longitude:" + Longitude + ",Latitude:" + Latitude);
             MapStatus.Builder builder = new MapStatus.Builder();
-            builder.zoom(21.0f);
+            builder.zoom(20.0f);
             mbaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
 //            mBaiduMap.setMyLocationData(locData);
 

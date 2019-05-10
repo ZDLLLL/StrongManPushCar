@@ -79,7 +79,8 @@
         <activity android:name=".Activity.Map.GaoDeBaseActivity" />
         <activity android:name=".Activity.Map.GaoDeNavActivity" />
         <activity android:name=".Activity.Map.WNaviGuideActivity" />
-        <activity android:name=".Activity.Map.RoutePlanningActivity" />
+        <activity android:name=".Activity.Map.RoutePlanningActivity"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".Activity.Shopping.GuideActivity"
             android:screenOrientation="landscape" />

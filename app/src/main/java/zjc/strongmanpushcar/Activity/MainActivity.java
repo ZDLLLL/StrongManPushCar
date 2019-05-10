@@ -70,8 +70,11 @@ import zjc.strongmanpushcar.BaseTools.indoorview.BaseStripAdapter;
 import zjc.strongmanpushcar.BaseTools.indoorview.StripListView;
 import zjc.strongmanpushcar.BaseTools.overlayutil.IndoorPoiOverlay;
 import zjc.strongmanpushcar.BaseTools.overlayutil.IndoorRouteOverlay;
+import zjc.strongmanpushcar.Beans.Flight;
 import zjc.strongmanpushcar.MyApplication;
 import zjc.strongmanpushcar.R;
+import zjc.strongmanpushcar.Servers.Server.ShoppingServer;
+import zjc.strongmanpushcar.Servers.ServerImp.ShoppingServerImp;
 
 public class MainActivity extends BaseActivity implements OnGetPoiSearchResultListener,BaiduMap.OnBaseIndoorMapListener,FlightRecyclerViewAdapter.onSlidingViewClickListener{
     @BindView(R.id.bmapView)MapView mapView;
@@ -112,6 +115,7 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
     @BindView(R.id.flight_number_tv)TextView flight_number_tv;
     @BindView(R.id.gate_tv)TextView gate_tv;
     @BindView(R.id.departmenttime_tv)TextView departmenttime_tv;
+    ShoppingServer shoppingServer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,8 +126,8 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.main_rl);
         layout.addView(stripListView);
         mFloorListAdapter = new BaseStripAdapter(this);
-
-
+        shoppingServer=new ShoppingServerImp(this);
+        shoppingServer.findFlightByTicket(MyApplication.getIdCard());
         InitLocation();
         InitIndoorMap();
         initOritationListener();
@@ -422,6 +426,12 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
 
     }
 
+    public void InitFlightMessage(Flight flight) {
+        flight_number_tv.setText(flight.getFlightId());
+        departmenttime_tv.setText(flight.getDepartureTime());
+        gate_tv.setText(flight.getCheckPort());
+    }
+
     public class MyOwnLocationListener extends BDAbstractLocationListener {
         @Override
         public void onReceiveLocation(BDLocation location) {
@@ -484,7 +494,7 @@ public class MainActivity extends BaseActivity implements OnGetPoiSearchResultLi
         if (isShowLoc) {
             LatLng centerpos = new LatLng(30.0992120000,120.5168240000); // 万达广场
             MapStatus.Builder builder = new MapStatus.Builder();
-            builder.target(centerpos).zoom(21.0f);
+            builder.target(centerpos).zoom(20.0f);
 //            LatLng ll = new LatLng(bdLocation.getLatitude(), bdLocation.getLongitude());
 //            MapStatus.Builder builder = new MapStatus.Builder();
 //            builder.target(ll).zoom(19.0f);

@@ -15,8 +15,10 @@ import java.util.List;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import zjc.strongmanpushcar.Activity.MainActivity;
 import zjc.strongmanpushcar.Activity.Shopping.GuideActivity;
 import zjc.strongmanpushcar.Activity.Shopping.ShoppingActivity;
+import zjc.strongmanpushcar.Beans.Flight;
 import zjc.strongmanpushcar.Beans.Food;
 import zjc.strongmanpushcar.Beans.FoodCatergory;
 import zjc.strongmanpushcar.Beans.Store;
@@ -29,6 +31,12 @@ import zjc.strongmanpushcar.Servers.Server.ShoppingServer;
 public class ShoppingServerImp implements ShoppingServer {
     ShoppingActivity shoppingActivity;
     GuideActivity guideActivity;
+    MainActivity mainActivity;
+
+    public ShoppingServerImp(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
+    }
+
     public ShoppingServerImp(ShoppingActivity shoppingActivity){
         this.shoppingActivity = shoppingActivity;
     }
@@ -250,6 +258,42 @@ public class ShoppingServerImp implements ShoppingServer {
                     }
 
 
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void findFlightByTicket(String useIdcard) {
+        String url=Net.findFlightByTicket+"userIdCard="+useIdcard;
+        Log.v("zjc",url);
+        OKHttp.sendOkhttpGetRequest(url, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Looper.prepare();
+                Toast.makeText(MyApplication.getContext(),"查找航班失败",Toast.LENGTH_LONG).show();
+                Looper.loop();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String ResponseData=response.body().string();
+                try {
+                    JSONObject jsonObject = new JSONObject(ResponseData);
+                    JSONObject jsonObject1=jsonObject.getJSONObject("data");
+                    Flight flight=new Flight();
+                    flight.setArrival(jsonObject1.getString("arrival"));
+                    flight.setArrivalTime(jsonObject1.getString("arrivalTime"));
+                    flight.setCheckPort(jsonObject1.getString("checkPort"));
+                    flight.setDeparture(jsonObject1.getString("departure"));
+                    flight.setDepartureTime(jsonObject1.getString("departureTime"));
+                    flight.setFlightCompany(jsonObject1.getString("flightCompany"));
+                    flight.setFlightDate(jsonObject1.getString("flightDate"));
+                    flight.setFlightId(jsonObject1.getString("flightId"));
+                    flight.setFlightNumber(jsonObject1.getString("flightNumber"));
+                    mainActivity.InitFlightMessage(flight);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

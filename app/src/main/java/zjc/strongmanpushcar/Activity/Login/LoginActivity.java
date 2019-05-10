@@ -68,6 +68,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onFinish() {
                 //倒计时结束时回调该函数
+                MyApplication.setIdCard("123456");
                 login_zxing_iv.setImageBitmap(null);
                 Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                 LoginActivity.this.startActivity(intent);
