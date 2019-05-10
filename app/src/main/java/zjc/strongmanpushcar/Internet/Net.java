@@ -10,6 +10,6 @@ public class Net {
     public final static String findShopByType=Head+"shop/findShopByTypeId";//根据类型查找商店列表
     public final static String getGoodsList=Head+"shop/getGoodsList";//查找商店的类型
     public final static String findAllFlight=Head+"flight/findAllFlight";//查找商店的类型
-    public final static String findFlightByTicket=Head+"shop/findFlightByTicket";//根据身份证查找航班
+    public final static String findFlightByTicket=Head+"flight/findFlightByTicket";//根据身份证查找航班
 
 }
