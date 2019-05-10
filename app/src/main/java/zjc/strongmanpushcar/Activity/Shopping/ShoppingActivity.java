@@ -7,6 +7,13 @@ import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.makeramen.roundedimageview.RoundedImageView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +36,11 @@ public class ShoppingActivity extends BaseActivity {
     RecyclerView catergory_rv;
     @BindView(R.id.food_rv)
     RecyclerView food_rv;
+    RoundedImageView shopping_img;
+    @BindView(R.id.shopping_bg)
+    ImageView shopping_bg;
+    @BindView(R.id.shopping_name)
+    TextView shopping_name;
     FoodAdapter foodAdapter;
     FoodCategoryAdapter foodCategoryAdapter;
 
@@ -39,8 +51,21 @@ public class ShoppingActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping);
         shoppingServer = new ShoppingServerImp(this);
+        shopping_img = findViewById(R.id.shopping_img);
         ShopId=getIntent().getStringExtra("shopId");
-        shoppingServer.getClassifyListByshopId("2");
+        shoppingServer.getClassifyListByshopId(ShopId);
+        Glide.with(getApplicationContext())
+                .load(MyApplication.getShopimage())
+                .asBitmap()
+                .error(R.drawable.kfc)
+                .into(shopping_bg);
+        Glide.with(getApplicationContext())
+                .load(MyApplication.getShopimage())
+                .asBitmap()
+                .error(R.drawable.kfc)
+                .into(shopping_img);
+        shopping_name.setText(MyApplication.getShopname());
+
     }
     public void CatergoryCallBack(final List<FoodCatergory> list){
          runOnUiThread(new Runnable() {

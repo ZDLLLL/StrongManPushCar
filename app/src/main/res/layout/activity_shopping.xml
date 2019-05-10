@@ -16,11 +16,16 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <RelativeLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
-                android:background="@drawable/kfc">
-
+                >
+                <ImageView
+                    android:id="@+id/shopping_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"/>
                 <ImageView
                     android:id="@+id/shopping_back"
                     android:layout_width="60dp"
@@ -28,7 +33,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="20dp"
                     android:src="@drawable/back" />
-            </LinearLayout>
+            </RelativeLayout>
             <LinearLayout
                 android:background="@drawable/circle"
                 android:layout_gravity="right"
@@ -57,14 +62,17 @@
 
 
             <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/shopping_img"
                 android:layout_width="160dp"
                 android:layout_height="160dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="-140dp"
+                android:scaleType="fitXY"
                 android:src="@drawable/kfc"
                 app:riv_oval="true" />
 
             <TextView
+                android:id="@+id/shopping_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

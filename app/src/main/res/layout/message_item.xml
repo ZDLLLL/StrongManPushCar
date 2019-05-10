@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:layout_marginTop="50dp "
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:background="#DFF1F1F1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <TextView
+        android:id="@+id/message_id"
         android:paddingLeft="8dp"
         android:layout_width="0dp"
         android:layout_weight="1"
@@ -15,6 +17,7 @@
         android:text="ZJH7-1"
         android:textSize="30sp"/>
     <TextView
+        android:id="@+id/message_departure"
         android:paddingLeft="8dp"
         android:layout_width="0dp"
         android:layout_weight="1"
@@ -24,6 +27,7 @@
         android:text="南京"
         android:textSize="30sp"/>
     <TextView
+        android:id="@+id/message_arrival"
         android:paddingLeft="8dp"
         android:layout_width="0dp"
         android:layout_weight="1"
@@ -33,6 +37,7 @@
         android:text="上海"
         android:textSize="30sp"/>
     <TextView
+        android:id="@+id/message_departureTime"
         android:paddingLeft="8dp"
         android:layout_width="0dp"
         android:layout_weight="1"
@@ -43,6 +48,7 @@
         android:textSize="30sp"/>
 
     <TextView
+        android:id="@+id/message_arrivalTime"
         android:paddingLeft="8dp"
         android:layout_width="0dp"
         android:layout_weight="1"
@@ -52,6 +58,7 @@
         android:text="7-17 18:40"
         android:textSize="30sp"/>
     <TextView
+        android:id="@+id/message_checkPort"
         android:paddingLeft="8dp"
         android:layout_width="0dp"
         android:layout_weight="1"

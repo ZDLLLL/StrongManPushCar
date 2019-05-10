@@ -10,7 +10,7 @@
     android:layout_width="30dp"
     android:layout_height="30dp"
     android:layout_gravity="center"
-    android:src="@drawable/image_1"
+    android:src="@drawable/love"
     />
 <TextView
     android:id="@+id/catergory_text"

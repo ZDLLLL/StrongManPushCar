@@ -37,6 +37,7 @@ public class GuideActivity extends BaseActivity {
         shoppingServer=new ShoppingServerImp(this);
         guide_store_rv.setLayoutManager(new GridLayoutManager(this,3,GridLayoutManager.VERTICAL,false));
         guide_claai_rv.setLayoutManager(new LinearLayoutManager(this));
+        guide_claai_rv.setNestedScrollingEnabled(false);
         shoppingServer.findAllShopType();
         initBanner();
 //        initClassification();
@@ -77,7 +78,7 @@ public class GuideActivity extends BaseActivity {
     StoreAdapter storeAdapter;
     //点击分类布局出现的商店布局
     public void  getStoreData(int i){
-        if (i!=0){
+        if (i!=1){
             guide_banner.setVisibility(View.GONE);
         }else {
             guide_banner.setVisibility(View.VISIBLE);

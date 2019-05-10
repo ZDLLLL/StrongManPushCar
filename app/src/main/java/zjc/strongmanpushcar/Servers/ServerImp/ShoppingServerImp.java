@@ -136,6 +136,8 @@ public class ShoppingServerImp implements ShoppingServer {
                         store.setShopId(jsonObject1.getString("shopId"));
                         store.setStoreImg(jsonObject1.getString("shopPhoto1"));
                         store.setStoreName(jsonObject1.getString("shopName"));
+                        store.setAverconsumption(jsonObject1.getString("avgPrice"));
+                        store.setShopLocation(jsonObject1.getString("shopLocation"));
                         storeList.add(store);
                     }
                 } catch (JSONException e) {
@@ -207,6 +209,8 @@ public class ShoppingServerImp implements ShoppingServer {
                         store.setShopId(jsonObject1.getString("shopId"));
                         store.setStoreImg(jsonObject1.getString("shopPhoto1"));
                         store.setStoreName(jsonObject1.getString("shopName"));
+                        store.setAverconsumption(jsonObject1.getString("avgPrice"));
+                        store.setShopLocation(jsonObject1.getString("shopLocation"));
                         storeList.add(store);
                     }
                     guideActivity.getStoreData(storeList);

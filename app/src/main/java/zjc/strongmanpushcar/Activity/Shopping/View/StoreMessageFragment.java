@@ -67,6 +67,8 @@ public class StoreMessageFragment extends DialogFragment {
         nav_bt=dialog.findViewById(R.id.nav_bt);
         averconsumption_tv=dialog.findViewById(R.id.averconsumption_tv);
         store_mes_img=dialog.findViewById(R.id.store_mes_img);
+
+        store_location_tv.setText(MyApplication.getShopLocation());
         store_mes_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

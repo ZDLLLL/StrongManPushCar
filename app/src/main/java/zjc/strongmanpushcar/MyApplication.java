@@ -25,9 +25,11 @@ public class MyApplication extends Application {
     public static UUID Server;
     public static UUID Characteristic;
     public static String Mac;
-    public static String shopname;
-    public static String shopprice;
-    public static String shopimage;
+    //商店信息
+    public static String shopLocation;//地点
+    public static String shopname;//商店名称
+    public static String shopprice;//商店价格
+    public static String shopimage;//商店图片
     public static double storeLongitude;//经度
     public static double storeLatitude;//纬度
     public static double mCurrentLongitude;//经度
@@ -51,6 +53,14 @@ public class MyApplication extends Application {
         //蓝牙加载的初始化
         instance = this;
         BluetoothContext.set(this);
+    }
+
+    public static String getShopLocation() {
+        return shopLocation;
+    }
+
+    public static void setShopLocation(String shopLocation) {
+        MyApplication.shopLocation = shopLocation;
     }
 
     public static String getShopname() {

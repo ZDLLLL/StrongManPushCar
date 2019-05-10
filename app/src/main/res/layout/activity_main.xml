@@ -140,6 +140,7 @@
             android:background="#8FFFFFFF"
             android:id="@+id/main_message"
             android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
             android:orientation="vertical"
             android:visibility="gone"
             android:layout_width="match_parent"
@@ -160,7 +161,7 @@
                     android:id="@+id/flight_number_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="das32131"/>
+                    android:text="CA1510"/>
             </LinearLayout>
 
             <LinearLayout
@@ -179,7 +180,7 @@
                     android:id="@+id/gate_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="A3"/>
+                    android:text="A17"/>
             </LinearLayout>
             <LinearLayout
                 android:orientation="horizontal"
@@ -198,7 +199,7 @@
                     android:id="@+id/departmenttime_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="2019-01-02"/>
+                    android:text="2019-01-02 11:32"/>
             </LinearLayout>
 
         </LinearLayout>

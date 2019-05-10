@@ -54,7 +54,7 @@ public class ClassificationAdapter extends RecyclerView.Adapter<ClassificationAd
         //判断该项是否点击
         if (isClicks.get(i)){
             classificationViewHodler.catergory_ll.setBackgroundColor(Color.WHITE);
-            guideActivity.getStoreData(i);
+            guideActivity.getStoreData(i+1);
         }else{
             classificationViewHodler.catergory_ll.setBackgroundColor(Color.argb(180,241,241,241));
         }

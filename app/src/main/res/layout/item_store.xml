@@ -6,16 +6,16 @@
     android:layout_width="250dp"
     android:layout_height="350dp">
 <android.support.v7.widget.CardView
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:cardCornerRadius="5dp"
-    app:cardElevation="10dp">
+    app:cardElevation="50dp">
     <ImageView
         android:id="@+id/store_img"
         android:src="@drawable/kfc"
         android:scaleType="fitXY"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="250dp"
+        android:layout_height="350dp" />
     <TextView
         android:id="@+id/store_name"
         android:layout_gravity="bottom"
@@ -23,7 +23,7 @@
         android:textColor="#fff"
         android:textSize="30sp"
         android:text="肯德基"
-        android:background="#865779E2"
+        android:background="#563258E2"
         android:layout_width="match_parent"
         android:layout_height="60dp" />
 </android.support.v7.widget.CardView>

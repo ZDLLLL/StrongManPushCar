@@ -7,6 +7,16 @@ public class Store {
     public String longitude;//经度
     public String latitude;//纬度
     public String averconsumption;//人均消费
+    public String shopLocation;
+
+    public String getShopLocation() {
+        return shopLocation;
+    }
+
+    public void setShopLocation(String shopLocation) {
+        this.shopLocation = shopLocation;
+    }
+
     public String getStoreName() {
         return StoreName;
     }

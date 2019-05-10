@@ -17,7 +17,7 @@ import zjc.strongmanpushcar.BaseTools.BaseActivity;
 import zjc.strongmanpushcar.Beans.DataUtil;
 import zjc.strongmanpushcar.R;
 
-public class MovieActivity extends BaseActivity {
+public class MovieActivity extends CompatHomeKeyActivity {
     @BindView(R.id.movie_rv)
     RecyclerView mRecyclerView;
     @Override
@@ -45,4 +45,5 @@ public class MovieActivity extends BaseActivity {
     public void movie_back_OnClick(){
         finish();
     }
+
 }

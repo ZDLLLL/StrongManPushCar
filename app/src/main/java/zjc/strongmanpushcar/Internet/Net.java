@@ -9,7 +9,7 @@ public class Net {
     public final static String findAllShopType=Head+"shop/findAllShopType";//查找商店的类型
     public final static String findShopByType=Head+"shop/findShopByTypeId";//查找商店的类型
     public final static String getGoodsList=Head+"shop/getGoodsList";//查找商店的类型
-
+    public final static String findAllFlight=Head+"flight/findAllFlight";//查找商店的类型
 
 
 }
