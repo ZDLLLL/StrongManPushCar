@@ -68,11 +68,17 @@ public class ClassificationAdapter extends RecyclerView.Adapter<ClassificationAd
                 notifyDataSetChanged();//通知Adpter改变
             }
         });
-        Glide.with(getContext())
-                .load(list.get(i).getClassificationImg())
-                .asBitmap()
-                .error(R.drawable.love)
-                .into(classificationViewHodler.catergory_img);
+//        Glide.with(getContext())
+//                .load(list.get(i).getClassificationImg())
+//                .asBitmap()
+//                .error(R.drawable.love)
+//                .into(classificationViewHodler.catergory_img);
+           switch (i){
+               case 0 :  classificationViewHodler.catergory_img.setImageResource(R.drawable.foods); break;
+               case 1 : classificationViewHodler.catergory_img.setImageResource(R.drawable.buyfood);break;
+               case 2 :  classificationViewHodler.catergory_img.setImageResource(R.drawable.techang);break;
+               default: break;
+           }
 
     }
 
